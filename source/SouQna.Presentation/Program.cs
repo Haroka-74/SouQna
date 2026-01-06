@@ -1,4 +1,8 @@
+using SouQna.Infrastructure;
 using Microsoft.OpenApi.Models;
+using SouQna.Presentation.Handlers;
+using SouQna.Application.Configuration;
+using SouQna.Infrastructure.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,8 +17,21 @@ builder.Services.AddSwaggerGen(c =>
         Description = "Your world of online shopping"
     });
 });
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+builder.Services.AddExceptionHandler<ConflictExceptionHandler>();
+builder.Services.AddExceptionHandler<ArgumentExceptionHandler>();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<SouQnaDbContext>();
+    context.Database.EnsureCreated();
+}
 
 if (app.Environment.IsDevelopment())
 {
@@ -22,6 +39,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseExceptionHandler();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
