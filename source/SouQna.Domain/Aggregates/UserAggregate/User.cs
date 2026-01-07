@@ -63,5 +63,32 @@ namespace SouQna.Domain.Aggregates.UserAggregate
                 DateTime.UtcNow
             );
         }
+
+        public void SetEmailConfirmationToken(string token, int expirationHours)
+        {
+            Guard.AgainstNullOrEmpty(token, nameof(token));
+
+            EmailConfirmationToken = token;
+            EmailConfirmationExpires = DateTime.UtcNow.AddHours(expirationHours);
+        }
+
+        public void ConfirmEmail(string token)
+        {
+            Guard.AgainstNullOrEmpty(token, nameof(token));
+
+            if(EmailConfirmed)
+                throw new InvalidOperationException("Email is already confirmed");
+
+            if(string.IsNullOrEmpty(EmailConfirmationToken))
+                throw new InvalidOperationException("No confirmation token has been generated");
+
+            if (EmailConfirmationToken != token)
+                throw new InvalidOperationException("Invalid confirmation token");
+
+            if (EmailConfirmationExpires == null || EmailConfirmationExpires < DateTime.UtcNow)
+                throw new InvalidOperationException("Confirmation token has expired");
+
+            EmailConfirmed = true;
+        }
     }
 }
