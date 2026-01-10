@@ -1,4 +1,6 @@
 namespace SouQna.Application.Exceptions
 {
-    public class ConflictException(string message) : Exception(message) {}
+    public class ConflictException(
+        string message
+    ) : Exception(message) {}
 }

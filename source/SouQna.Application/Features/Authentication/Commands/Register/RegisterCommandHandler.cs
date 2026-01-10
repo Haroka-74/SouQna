@@ -3,32 +3,32 @@ using SouQna.Application.Exceptions;
 using SouQna.Application.Interfaces;
 using SouQna.Domain.Aggregates.UserAggregate;
 
-namespace SouQna.Application.Features.Authentication.Register
+namespace SouQna.Application.Features.Authentication.Commands.Register
 {
-    public class RegisterHandler(
+    public class RegisterCommandHandler(
         ICryptoService cryptoService,
         IUnitOfWork unitOfWork,
-        ITokenGenerator tokenGenerator,
+        IRandomTokenService randomTokenService,
         IEmailService emailService,
-        IEmailGenerator emailGenerator
-    ) : IRequestHandler<RegisterRequest, RegisterResponse>
+        IEmailTemplateService emailTemplateService
+    ) : IRequestHandler<RegisterCommand, RegisterResponse>
     {
         public async Task<RegisterResponse> Handle(
-            RegisterRequest request,
+            RegisterCommand command,
             CancellationToken cancellationToken
         )
         {
-            if(await unitOfWork.Users.FindAsync(u => u.Email == request.Email) is not null)
-                throw new ConflictException($"The email address '{request.Email}' is already associated with an account");
+            if(await unitOfWork.Users.FindAsync(u => u.Email == command.Email) is not null)
+                throw new ConflictException($"The email address '{command.Email}' is already associated with an account");
 
             var user = User.Create(
-                request.FirstName,
-                request.LastName,
-                request.Email,
-                cryptoService.Hash(request.Password)
+                command.FirstName,
+                command.LastName,
+                command.Email,
+                cryptoService.Hash(command.Password)
             );
 
-            var confirmationToken = tokenGenerator.Generate();
+            var confirmationToken = randomTokenService.Generate(64);
 
             user.SetEmailConfirmationToken(confirmationToken, 2);
 
@@ -37,7 +37,7 @@ namespace SouQna.Application.Features.Authentication.Register
 
             var confirmationLink = $"http://localhost:5239/api/auth/confirm-email?token={Uri.EscapeDataString(confirmationToken)}";
 
-            var body = emailGenerator.GetConfirmationEmail($"{user.FirstName}", confirmationLink);
+            var body = emailTemplateService.GetConfirmationEmail($"{user.FirstName}", confirmationLink);
 
             _ = emailService.SendAsync(user.Email, "Please confirm your email", body);
 

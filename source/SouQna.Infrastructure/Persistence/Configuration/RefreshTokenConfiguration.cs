@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using SouQna.Domain.Aggregates.UserAggregate;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace SouQna.Infrastructure.Configuration
+namespace SouQna.Infrastructure.Persistence.Configuration
 {
     public class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
     {

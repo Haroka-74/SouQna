@@ -1,6 +1,6 @@
 namespace SouQna.Application.Interfaces
 {
-    public interface IEmailGenerator
+    public interface IEmailTemplateService
     {
         string GetConfirmationEmail(string name, string confirmationLink);
     }

@@ -1,8 +1,8 @@
 using MediatR;
 
-namespace SouQna.Application.Features.Authentication.Register
+namespace SouQna.Application.Features.Authentication.Commands.Register
 {
-    public record RegisterRequest(
+    public record RegisterCommand(
         string FirstName,
         string LastName,
         string Email,

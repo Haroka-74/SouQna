@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using SouQna.Application.Interfaces;
 
-namespace SouQna.Infrastructure.Repositories
+namespace SouQna.Infrastructure.Persistence.Repositories
 {
     public class Repository<T>(SouQnaDbContext context) : IRepository<T> where T : class
     {

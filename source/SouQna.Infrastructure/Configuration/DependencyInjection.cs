@@ -1,10 +1,12 @@
-using SouQna.Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
 using SouQna.Application.Interfaces;
-using SouQna.Infrastructure.Services;
-using SouQna.Infrastructure.Repositories;
+using SouQna.Infrastructure.Persistence;
 using Microsoft.Extensions.Configuration;
+using SouQna.Infrastructure.Services.Email;
 using Microsoft.Extensions.DependencyInjection;
+using SouQna.Infrastructure.Services.Cryptography;
+using SouQna.Infrastructure.Services.Authentication;
+using SouQna.Infrastructure.Persistence.Repositories;
 
 namespace SouQna.Infrastructure.Configuration
 {
@@ -12,18 +14,16 @@ namespace SouQna.Infrastructure.Configuration
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
-
             services.AddDbContext<SouQnaDbContext>(options =>
             {
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
             });
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<ICryptoService, CryptoService>();
-            services.AddScoped<ITokenGenerator, TokenGenerator>();
-            services.AddScoped<IEmailGenerator, EmailGenerator>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<ICryptoService, CryptoService>();
+            services.AddScoped<IRandomTokenService, RandomTokenService>();
+            services.AddScoped<IEmailTemplateService, EmailTemplateService>();
 
             return services;
         }

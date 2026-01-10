@@ -1,6 +1,6 @@
 using SouQna.Application.Interfaces;
 
-namespace SouQna.Infrastructure.Services
+namespace SouQna.Infrastructure.Services.Cryptography
 {
     public class CryptoService : ICryptoService
     {

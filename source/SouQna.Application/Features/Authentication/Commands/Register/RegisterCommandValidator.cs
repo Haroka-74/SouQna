@@ -1,10 +1,10 @@
 using FluentValidation;
 
-namespace SouQna.Application.Features.Authentication.Register
+namespace SouQna.Application.Features.Authentication.Commands.Register
 {
-    public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
+    public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
     {
-        public RegisterRequestValidator()
+        public RegisterCommandValidator()
         {
             RuleFor(x => x.FirstName)
                 .NotEmpty().WithMessage("First name is required")

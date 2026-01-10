@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SouQna.Domain.Aggregates.UserAggregate;
 
-namespace SouQna.Infrastructure
+namespace SouQna.Infrastructure.Persistence
 {
     public class SouQnaDbContext(
         DbContextOptions<SouQnaDbContext> options

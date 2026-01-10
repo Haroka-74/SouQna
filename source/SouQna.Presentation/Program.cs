@@ -1,7 +1,7 @@
-using SouQna.Infrastructure;
 using Microsoft.OpenApi.Models;
 using SouQna.Presentation.Handlers;
 using SouQna.Application.Configuration;
+using SouQna.Infrastructure.Persistence;
 using SouQna.Infrastructure.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);

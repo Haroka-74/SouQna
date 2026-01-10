@@ -4,7 +4,7 @@ using MailKit.Security;
 using SouQna.Application.Interfaces;
 using Microsoft.Extensions.Configuration;
 
-namespace SouQna.Infrastructure.Services
+namespace SouQna.Infrastructure.Services.Email
 {
     public class EmailService(IConfiguration configuration) : IEmailService
     {

@@ -1,7 +1,7 @@
 using SouQna.Application.Interfaces;
 using SouQna.Domain.Aggregates.UserAggregate;
 
-namespace SouQna.Infrastructure.Repositories
+namespace SouQna.Infrastructure.Persistence.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {

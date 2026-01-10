@@ -1,4 +1,4 @@
-namespace SouQna.Application.Features.Authentication.Register
+namespace SouQna.Application.Features.Authentication.Commands.Register
 {
     public class RegisterResponse
     {

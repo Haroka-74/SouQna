@@ -1,8 +1,8 @@
 using SouQna.Application.Interfaces;
 
-namespace SouQna.Infrastructure.Services
+namespace SouQna.Infrastructure.Services.Email
 {
-    public class EmailGenerator : IEmailGenerator
+    public class EmailTemplateService : IEmailTemplateService
     {
         public string GetConfirmationEmail(string name, string confirmationLink)
         {

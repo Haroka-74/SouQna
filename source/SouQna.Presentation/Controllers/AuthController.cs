@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SouQna.Application.Features.Authentication.Register;
-using SouQna.Application.Features.Authentication.ConfirmEmail;
+using SouQna.Application.Features.Authentication.Commands.Register;
+using SouQna.Application.Features.Authentication.Commands.ConfirmEmail;
 
 namespace SouQna.Presentation.Controllers
 {
@@ -10,15 +10,13 @@ namespace SouQna.Presentation.Controllers
     public class AuthController(ISender sender) : ControllerBase
     {
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterAsync(RegisterRequest request)
-        {
-            return Ok(await sender.Send(request));
-        }
+        public async Task<IActionResult> RegisterAsync(RegisterCommand command)
+            => Ok(await sender.Send(command));
 
         [HttpGet("confirm-email")]
-        public async Task<IActionResult> ConfirmEmail([FromQuery] string token)
+        public async Task<IActionResult> ConfirmEmailAsync([FromQuery] string token)
         {
-            await sender.Send(new ConfirmEmailRequest(token));
+            await sender.Send(new ConfirmEmailCommand(token));
             return Ok("Email confirmed successfully");
         }
     }
