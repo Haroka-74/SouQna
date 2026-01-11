@@ -11,8 +11,6 @@ namespace SouQna.Domain.Aggregates.UserAggregate
         public DateTime ExpiresAt { get; private set; }
         public DateTime CreatedAt { get; private set; }
 
-        public bool IsActive => !IsRevoked && DateTime.UtcNow < ExpiresAt;
-
         public User User { get; private set; }
 
         private RefreshToken()
@@ -53,6 +51,13 @@ namespace SouQna.Domain.Aggregates.UserAggregate
                 DateTime.UtcNow.AddDays(expiryInDays),
                 DateTime.UtcNow
             );
+        }
+
+        public void Revoke()
+        {
+            Ensure.Not(IsRevoked, "Token is already revoked");
+
+            IsRevoked = true;
         }
     }
 }

@@ -24,6 +24,7 @@ builder.Services.AddExceptionHandler<ConflictExceptionHandler>();
 builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
 builder.Services.AddExceptionHandler<InvalidCredentialsExceptionHandler>();
 builder.Services.AddExceptionHandler<EmailNotConfirmedExceptionHandler>();
+builder.Services.AddExceptionHandler<InvalidRefreshTokenExceptionHandler>();
 builder.Services.AddExceptionHandler<ArgumentExceptionHandler>();
 builder.Services.AddExceptionHandler<InvalidOperationExceptionHandler>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();

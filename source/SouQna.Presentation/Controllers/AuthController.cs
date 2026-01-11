@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using SouQna.Application.Features.Authentication.Commands.Login;
 using SouQna.Application.Features.Authentication.Commands.Register;
 using SouQna.Application.Features.Authentication.Commands.ConfirmEmail;
+using SouQna.Application.Features.Authentication.Commands.RefreshToken;
 
 namespace SouQna.Presentation.Controllers
 {
@@ -24,6 +25,10 @@ namespace SouQna.Presentation.Controllers
 
         [HttpPost("login")]
         public async Task<IActionResult> LoginAsync(LoginCommand command)
+            => Ok(await sender.Send(command));
+
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshTokenAsync(RefreshTokenCommand command)
             => Ok(await sender.Send(command));
 
         [HttpGet("get-data"), Authorize]

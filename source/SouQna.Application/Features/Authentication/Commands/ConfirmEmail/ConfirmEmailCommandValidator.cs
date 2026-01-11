@@ -7,7 +7,7 @@ namespace SouQna.Application.Features.Authentication.Commands.ConfirmEmail
         public ConfirmEmailCommandValidator()
         {
             RuleFor(x => x.Token)
-                .NotEmpty().WithMessage("First name is required");
+                .NotEmpty().WithMessage("Token is required");
         }
     }
 }
