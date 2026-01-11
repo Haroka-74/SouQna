@@ -1,6 +1,7 @@
 using MediatR;
 using SouQna.Application.Exceptions;
 using SouQna.Application.Interfaces;
+using SouQna.Domain.Aggregates.UserAggregate.Extensions;
 using TokenEntity = SouQna.Domain.Aggregates.UserAggregate;
 
 namespace SouQna.Application.Features.Authentication.Commands.RefreshToken
@@ -25,17 +26,12 @@ namespace SouQna.Application.Features.Authentication.Commands.RefreshToken
 
             var refreshToken = user.RefreshTokens.Single(t => t.Token == command.RefreshToken);
 
-            if (refreshToken.IsRevoked || DateTime.UtcNow >= refreshToken.ExpiresAt)
+            if (!refreshToken.IsValid())
                 throw new InvalidRefreshTokenException("Refresh token has expired or been revoked");
 
             refreshToken.Revoke();
 
-            var refreshTokensToRemove = user.RefreshTokens.Where(
-                t => t.IsRevoked || DateTime.UtcNow >= t.ExpiresAt
-            ).ToList();
-
-            foreach(var token in refreshTokensToRemove)
-                user.RemoveRefreshToken(token);
+            user.CleanupInvalidRefreshTokens();
 
             var newAccessToken = jwtTokenService.Generate(user);
             var newRefreshToken = TokenEntity.RefreshToken.Create(

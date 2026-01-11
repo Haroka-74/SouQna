@@ -1,8 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using SouQna.Application.Features.Authentication.Commands.Login;
 using SouQna.Application.Features.Authentication.Commands.Register;
+using SouQna.Application.Features.Authentication.Commands.RevokeToken;
 using SouQna.Application.Features.Authentication.Commands.ConfirmEmail;
 using SouQna.Application.Features.Authentication.Commands.RefreshToken;
 
@@ -31,10 +31,11 @@ namespace SouQna.Presentation.Controllers
         public async Task<IActionResult> RefreshTokenAsync(RefreshTokenCommand command)
             => Ok(await sender.Send(command));
 
-        [HttpGet("get-data"), Authorize]
-        public async Task<IActionResult> GetData()
+        [HttpPost("revoke-token")]
+        public async Task<IActionResult> RevokeTokenAsync(RevokeTokenCommand command)
         {
-            return Ok("Hello from secured controller");
+            await sender.Send(command);
+            return NoContent();
         }
     }
 }

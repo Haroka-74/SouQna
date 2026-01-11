@@ -1,6 +1,7 @@
 using MediatR;
 using SouQna.Application.Exceptions;
 using SouQna.Application.Interfaces;
+using SouQna.Domain.Aggregates.UserAggregate.Extensions;
 using TokenEntity = SouQna.Domain.Aggregates.UserAggregate;
 
 namespace SouQna.Application.Features.Authentication.Commands.Login
@@ -29,16 +30,9 @@ namespace SouQna.Application.Features.Authentication.Commands.Login
                 throw new EmailNotConfirmedException("Email not confirmed. Please verify your account!");
 
             var accessToken = jwtTokenService.Generate(user);
-            var refreshToken = user.RefreshTokens.FirstOrDefault(
-                t => !t.IsRevoked && DateTime.UtcNow < t.ExpiresAt
-            );
+            var refreshToken = user.RefreshTokens.FirstOrDefault(t => t.IsValid());
 
-            var refreshTokensToRemove = user.RefreshTokens.Where(
-                t => t.IsRevoked || DateTime.UtcNow >= t.ExpiresAt
-            ).ToList();
-
-            foreach(var token in refreshTokensToRemove)
-                user.RemoveRefreshToken(token);
+            user.CleanupInvalidRefreshTokens();
 
             if(refreshToken is null)
             {
