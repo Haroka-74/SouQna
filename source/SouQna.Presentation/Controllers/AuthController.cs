@@ -5,6 +5,7 @@ using SouQna.Application.Features.Authentication.Commands.Register;
 using SouQna.Application.Features.Authentication.Commands.RevokeToken;
 using SouQna.Application.Features.Authentication.Commands.ConfirmEmail;
 using SouQna.Application.Features.Authentication.Commands.RefreshToken;
+using SouQna.Application.Features.Authentication.Commands.ResendEmailConfirmation;
 
 namespace SouQna.Presentation.Controllers
 {
@@ -36,6 +37,13 @@ namespace SouQna.Presentation.Controllers
         {
             await sender.Send(command);
             return NoContent();
+        }
+
+        [HttpPost("resend-confirmation")]
+        public async Task<IActionResult> ResendConfirmationAsync(ResendEmailConfirmationCommand command)
+        {
+            await sender.Send(command);
+            return Ok();
         }
     }
 }
