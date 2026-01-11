@@ -4,6 +4,8 @@ namespace SouQna.Domain.Aggregates.UserAggregate
 {
     public class User
     {
+        private readonly List<RefreshToken> _refreshTokens = [];
+
         public Guid Id { get; private set; }
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
@@ -14,7 +16,7 @@ namespace SouQna.Domain.Aggregates.UserAggregate
         public DateTime? EmailConfirmationExpires { get; private set; }
         public DateTime CreatedAt { get; private set; }
 
-        public IEnumerable<RefreshToken> RefreshTokens { get; private set; }
+        public IReadOnlyCollection<RefreshToken> RefreshTokens => _refreshTokens.AsReadOnly();
 
         private User()
         {
@@ -23,7 +25,6 @@ namespace SouQna.Domain.Aggregates.UserAggregate
             Email = string.Empty;
             PasswordHash = string.Empty;
             EmailConfirmed = false;
-            RefreshTokens = [];
         }
 
         private User(
@@ -44,7 +45,6 @@ namespace SouQna.Domain.Aggregates.UserAggregate
             EmailConfirmationToken = null;
             EmailConfirmationExpires = null;
             CreatedAt = createdAt;
-            RefreshTokens = [];
         }
 
         public static User Create(string firstName, string lastName, string email, string passwordHash)
@@ -67,6 +67,7 @@ namespace SouQna.Domain.Aggregates.UserAggregate
         public void SetEmailConfirmationToken(string token, int expirationHours)
         {
             Guard.AgainstNullOrEmpty(token, nameof(token));
+            Guard.AgainstNegativeOrZero(expirationHours, nameof(expirationHours));
 
             EmailConfirmationToken = token;
             EmailConfirmationExpires = DateTime.UtcNow.AddHours(expirationHours);
@@ -76,19 +77,31 @@ namespace SouQna.Domain.Aggregates.UserAggregate
         {
             Guard.AgainstNullOrEmpty(token, nameof(token));
 
-            if(EmailConfirmed)
-                throw new InvalidOperationException("Email is already confirmed");
-
-            if(string.IsNullOrEmpty(EmailConfirmationToken))
-                throw new InvalidOperationException("No confirmation token has been generated");
-
-            if (EmailConfirmationToken != token)
-                throw new InvalidOperationException("Invalid confirmation token");
-
-            if (EmailConfirmationExpires == null || EmailConfirmationExpires < DateTime.UtcNow)
-                throw new InvalidOperationException("Confirmation token has expired");
+            Ensure.Not(EmailConfirmed, "Email is already confirmed");
+            Ensure.NotNullOrEmpty(EmailConfirmationToken, "No confirmation token has been generated");
+            Ensure.That(EmailConfirmationToken == token, "Invalid confirmation token");
+            Ensure.That(
+                EmailConfirmationExpires.HasValue && EmailConfirmationExpires >= DateTime.UtcNow,
+                "Confirmation token has expired"
+            );
 
             EmailConfirmed = true;
+            EmailConfirmationToken = null;
+            EmailConfirmationExpires = null;
+        }
+
+        public void AddRefreshToken(RefreshToken refreshToken)
+        {
+            Guard.AgainstNull(refreshToken, nameof(refreshToken));
+
+            _refreshTokens.Add(refreshToken);
+        }
+
+        public void RemoveRefreshToken(RefreshToken refreshToken)
+        {
+            Guard.AgainstNull(refreshToken, nameof(refreshToken));
+
+            _refreshTokens.Remove(refreshToken);
         }
     }
 }

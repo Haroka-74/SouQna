@@ -9,6 +9,21 @@ namespace SouQna.Infrastructure.Persistence.Repositories
         public async Task<T?> FindAsync(Expression<Func<T, bool>> predicate)
             => await context.Set<T>().FirstOrDefaultAsync(predicate);
 
+        public async Task<T?> FindAsync(
+            Expression<Func<T, bool>> predicate,
+            params Expression<Func<T, object>>[] includes
+        )
+        {
+            IQueryable<T> query = context.Set<T>();
+
+            foreach(var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return await query.FirstOrDefaultAsync(predicate);
+        }
+
         public async Task<T> AddAsync(T entity)
         {
             await context.Set<T>().AddAsync(entity);

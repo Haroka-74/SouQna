@@ -37,7 +37,7 @@ namespace SouQna.Application.Features.Authentication.Commands.Register
 
             var confirmationLink = $"http://localhost:5239/api/auth/confirm-email?token={Uri.EscapeDataString(confirmationToken)}";
 
-            var body = emailTemplateService.GetConfirmationEmail($"{user.FirstName}", confirmationLink);
+            var body = emailTemplateService.GetConfirmationEmail(user.FirstName, confirmationLink);
 
             _ = emailService.SendAsync(user.Email, "Please confirm your email", body);
 

@@ -9,14 +9,15 @@ namespace SouQna.Infrastructure.Persistence.Configuration
         public void Configure(EntityTypeBuilder<RefreshToken> builder)
         {
             builder
-                .HasIndex(r => r.Token)
-                .IsUnique();
+                .HasKey(r => r.Id);
 
             builder
-                .HasOne(r => r.User)
-                .WithMany(u => u.RefreshTokens)
-                .HasForeignKey(r => r.UserId)
-                .IsRequired();
+                .Property(r => r.Id)
+                .ValueGeneratedNever();
+
+            builder
+                .HasIndex(r => r.Token)
+                .IsUnique();
         }
     }
 }
