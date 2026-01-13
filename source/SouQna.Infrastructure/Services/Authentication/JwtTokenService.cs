@@ -22,10 +22,8 @@ namespace SouQna.Infrastructure.Services.Authentication
                 claims:
                 [
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
-                    new Claim(ClaimTypes.Email, user.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString())
+                    // Add user roles here when create some roles!!!
                 ],
                 expires: DateTime.UtcNow.AddMinutes(60),
                 signingCredentials: new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256)

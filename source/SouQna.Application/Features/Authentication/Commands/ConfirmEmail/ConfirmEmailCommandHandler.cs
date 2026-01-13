@@ -18,7 +18,6 @@ namespace SouQna.Application.Features.Authentication.Commands.ConfirmEmail
             ) ?? throw new NotFoundException($"User with token ({command.Token}) was not found");
 
             user.ConfirmEmail(command.Token);
-
             await unitOfWork.SaveChangesAsync();
         }
     }

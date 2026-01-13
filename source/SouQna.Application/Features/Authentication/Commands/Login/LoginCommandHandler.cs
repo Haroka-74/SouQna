@@ -1,7 +1,8 @@
 using MediatR;
-using SouQna.Application.Exceptions;
+using SouQna.Domain.Extensions;
 using SouQna.Application.Interfaces;
-using SouQna.Domain.Aggregates.UserAggregate.Extensions;
+using SouQna.Application.Exceptions;
+using SouQna.Application.Exceptions.Enums;
 using TokenEntity = SouQna.Domain.Aggregates.UserAggregate;
 
 namespace SouQna.Application.Features.Authentication.Commands.Login
@@ -24,13 +25,23 @@ namespace SouQna.Application.Features.Authentication.Commands.Login
             );
 
             if(user is null || !cryptoService.Verify(command.Password, user.PasswordHash))
-                throw new InvalidCredentialsException("Email or Password is incorrect!");
+            {
+                throw new AuthenticationException(
+                    AuthenticationErrorType.InvalidCredentials,
+                    "Email or Password is incorrect!"
+                );
+            }
 
             if(!user.EmailConfirmed)
-                throw new EmailNotConfirmedException("Email not confirmed. Please verify your account!");
+            {
+                throw new AuthenticationException(
+                    AuthenticationErrorType.EmailNotConfirmed,
+                    "Email not confirmed. Please verify your account!"
+                );
+            }
 
             var accessToken = jwtTokenService.Generate(user);
-            var refreshToken = user.RefreshTokens.FirstOrDefault(t => t.IsValid());
+            var refreshToken = user.RefreshTokens.FirstOrDefault(t => t.IsValid);
 
             user.CleanupInvalidRefreshTokens();
 

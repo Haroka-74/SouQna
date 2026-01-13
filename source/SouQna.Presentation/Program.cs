@@ -16,16 +16,41 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1",
         Description = "Your world of online shopping"
     });
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme.",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
 });
+
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+
 builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
 builder.Services.AddExceptionHandler<ConflictExceptionHandler>();
 builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
-builder.Services.AddExceptionHandler<InvalidCredentialsExceptionHandler>();
-builder.Services.AddExceptionHandler<EmailNotConfirmedExceptionHandler>();
-builder.Services.AddExceptionHandler<InvalidRefreshTokenExceptionHandler>();
+builder.Services.AddExceptionHandler<AuthenticationExceptionHandler>();
 builder.Services.AddExceptionHandler<ArgumentExceptionHandler>();
+builder.Services.AddExceptionHandler<ArgumentOutOfRangeExceptionHandler>();
 builder.Services.AddExceptionHandler<InvalidOperationExceptionHandler>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();

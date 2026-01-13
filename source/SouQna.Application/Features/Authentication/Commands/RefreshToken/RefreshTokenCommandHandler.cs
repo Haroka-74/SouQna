@@ -1,7 +1,8 @@
 using MediatR;
-using SouQna.Application.Exceptions;
+using SouQna.Domain.Extensions;
 using SouQna.Application.Interfaces;
-using SouQna.Domain.Aggregates.UserAggregate.Extensions;
+using SouQna.Application.Exceptions;
+using SouQna.Application.Exceptions.Enums;
 using TokenEntity = SouQna.Domain.Aggregates.UserAggregate;
 
 namespace SouQna.Application.Features.Authentication.Commands.RefreshToken
@@ -22,12 +23,28 @@ namespace SouQna.Application.Features.Authentication.Commands.RefreshToken
                     t => t.Token == command.RefreshToken
                 ),
                 u => u.RefreshTokens
-            ) ?? throw new InvalidRefreshTokenException("Invalid refresh token");
+            ) ?? throw new AuthenticationException(
+                AuthenticationErrorType.InvalidRefreshToken,
+                "Invalid refresh token"
+            );
 
             var refreshToken = user.RefreshTokens.Single(t => t.Token == command.RefreshToken);
 
-            if (!refreshToken.IsValid())
-                throw new InvalidRefreshTokenException("Refresh token has expired or been revoked");
+            if (refreshToken.IsRevoked)
+            {
+                throw new AuthenticationException(
+                    AuthenticationErrorType.TokenRevoked,
+                    "Refresh token has been revoked"
+                );
+            }
+
+            if (refreshToken.IsExpired)
+            {
+                throw new AuthenticationException(
+                    AuthenticationErrorType.TokenExpired,
+                    "Refresh token has expired"
+                );
+            }
 
             refreshToken.Revoke();
 

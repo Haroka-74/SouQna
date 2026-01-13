@@ -18,13 +18,15 @@ namespace SouQna.Application.Features.Authentication.Commands.Register
             CancellationToken cancellationToken
         )
         {
-            if(await unitOfWork.Users.FindAsync(u => u.Email == command.Email) is not null)
-                throw new ConflictException($"The email address '{command.Email}' is already associated with an account");
+            var normalizedEmail = command.Email.Trim().ToLowerInvariant();
+
+            if(await unitOfWork.Users.FindAsync(u => u.Email == normalizedEmail) is not null)
+                throw new ConflictException($"The email address '{command.Email}' is already registered");
 
             var user = User.Create(
                 command.FirstName,
                 command.LastName,
-                command.Email,
+                normalizedEmail,
                 cryptoService.Hash(command.Password)
             );
 

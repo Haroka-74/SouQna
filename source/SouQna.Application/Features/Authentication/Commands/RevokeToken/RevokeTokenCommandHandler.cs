@@ -1,6 +1,5 @@
 using MediatR;
 using SouQna.Application.Interfaces;
-using SouQna.Domain.Aggregates.UserAggregate.Extensions;
 
 namespace SouQna.Application.Features.Authentication.Commands.RevokeToken
 {
@@ -25,7 +24,7 @@ namespace SouQna.Application.Features.Authentication.Commands.RevokeToken
 
             var refreshToken = user.RefreshTokens.Single(t => t.Token == command.RefreshToken);
 
-            if (!refreshToken.IsValid())
+            if (!refreshToken.IsValid)
                 return;
 
             refreshToken.Revoke();

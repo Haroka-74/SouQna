@@ -56,9 +56,9 @@ namespace SouQna.Domain.Aggregates.UserAggregate
 
             return new User(
                 Guid.NewGuid(),
-                firstName,
-                lastName,
-                email,
+                firstName.Trim(),
+                lastName.Trim(),
+                email.Trim().ToLowerInvariant(),
                 passwordHash,
                 DateTime.UtcNow
             );
@@ -67,7 +67,12 @@ namespace SouQna.Domain.Aggregates.UserAggregate
         public void SetEmailConfirmationToken(string token, int expirationHours)
         {
             Guard.AgainstNullOrEmpty(token, nameof(token));
-            Guard.AgainstNegativeOrZero(expirationHours, nameof(expirationHours));
+            Guard.AgainstOutOfRange(
+                expirationHours,
+                1,
+                2,
+                nameof(expirationHours)
+            );
 
             EmailConfirmationToken = token;
             EmailConfirmationExpires = DateTime.UtcNow.AddHours(expirationHours);
@@ -79,9 +84,12 @@ namespace SouQna.Domain.Aggregates.UserAggregate
 
             Ensure.Not(EmailConfirmed, "Email is already confirmed");
             Ensure.NotNullOrEmpty(EmailConfirmationToken, "No confirmation token has been generated");
-            Ensure.That(EmailConfirmationToken == token, "Invalid confirmation token");
             Ensure.That(
-                EmailConfirmationExpires.HasValue && EmailConfirmationExpires >= DateTime.UtcNow,
+                EmailConfirmationToken == token,
+                "Invalid confirmation token"
+            );
+            Ensure.That(
+                EmailConfirmationExpires.HasValue && EmailConfirmationExpires > DateTime.UtcNow,
                 "Confirmation token has expired"
             );
 

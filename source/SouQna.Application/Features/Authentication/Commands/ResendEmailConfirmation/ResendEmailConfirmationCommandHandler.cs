@@ -16,12 +16,14 @@ namespace SouQna.Application.Features.Authentication.Commands.ResendEmailConfirm
             CancellationToken cancellationToken
         )
         {
+            var normalizedEmail = command.Email.Trim().ToLowerInvariant();
+
             var user = await unitOfWork.Users.FindAsync(
-                u => u.Email == command.Email
+                u => u.Email == normalizedEmail
             ) ?? throw new NotFoundException($"No account found with email '{command.Email}'");
 
             if(user.EmailConfirmed)
-                throw new InvalidOperationException("Email is already confirmed");
+                return;
 
             var confirmationToken = randomTokenService.Generate(64);
 

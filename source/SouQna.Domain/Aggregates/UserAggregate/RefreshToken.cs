@@ -13,6 +13,9 @@ namespace SouQna.Domain.Aggregates.UserAggregate
 
         public User User { get; private set; }
 
+        public bool IsExpired => ExpiresAt <= DateTime.UtcNow;
+        public bool IsValid => !IsRevoked && !IsExpired;
+
         private RefreshToken()
         {
             Token = string.Empty;
@@ -41,7 +44,7 @@ namespace SouQna.Domain.Aggregates.UserAggregate
         {
             Guard.AgainstNullOrEmpty(userId.ToString(), nameof(userId));
             Guard.AgainstNullOrEmpty(token, nameof(token));
-            Guard.AgainstNegativeOrZero(expiryInDays, nameof(expiryInDays));
+            Guard.AgainstOutOfRange(expiryInDays, 1, 7, nameof(expiryInDays));
 
             return new RefreshToken(
                 Guid.NewGuid(),
@@ -55,9 +58,10 @@ namespace SouQna.Domain.Aggregates.UserAggregate
 
         public void Revoke()
         {
-            Ensure.Not(IsRevoked, "Token is already revoked");
-
-            IsRevoked = true;
+            if(!IsRevoked)
+            {
+                IsRevoked = true;
+            }
         }
     }
 }
