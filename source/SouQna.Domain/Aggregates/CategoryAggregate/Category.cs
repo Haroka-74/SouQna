@@ -50,6 +50,15 @@ namespace SouQna.Domain.Aggregates.CategoryAggregate
             );
         }
 
+        public void Update(string name, string description)
+        {
+            Guard.AgainstNullOrEmpty(name, nameof(name));
+            Guard.AgainstNullOrEmpty(description, nameof(description));
+
+            Name = name;
+            Description = description;
+        }
+
         public bool HasSubcategories() => _subcategories.Count != 0;
     }
 }
