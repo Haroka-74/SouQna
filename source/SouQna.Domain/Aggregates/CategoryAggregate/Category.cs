@@ -49,5 +49,7 @@ namespace SouQna.Domain.Aggregates.CategoryAggregate
                 DateTime.UtcNow
             );
         }
+
+        public bool HasSubcategories() => _subcategories.Count != 0;
     }
 }

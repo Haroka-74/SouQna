@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SouQna.Application.Features.Categories.Commands.AddCategory;
+using SouQna.Application.Features.Categories.Commands.DeleteCategory;
 using SouQna.Application.Features.Categories.Queries.GetCategoryById;
 
 namespace SouQna.Presentation.Controllers
@@ -25,6 +26,15 @@ namespace SouQna.Presentation.Controllers
         {
             var result = await sender.Send(command);
             return CreatedAtAction("GetById", new { id = result.Id }, result);
+        }
+
+        [HttpDelete("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteAsync(Guid id)
+        {
+            await sender.Send(new DeleteCategoryCommand(id));
+            return NoContent();
         }
     }
 }
