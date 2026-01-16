@@ -18,8 +18,8 @@ namespace SouQna.Presentation.Controllers
         [ProducesResponseType(typeof(PagedResult<CategoryDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetAllAsync(
-            [FromQuery] int pageNumber,
-            [FromQuery] int pageSize,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10,
             [FromQuery] string? orderBy = null,
             [FromQuery] bool isDescending = false
         )

@@ -16,7 +16,7 @@ namespace SouQna.Application.Features.Categories.Commands.AddCategory
 
             RuleFor(x => x.ParentId)
                 .NotEqual(Guid.Empty).WithMessage("Parent ID must not be an empty GUID")
-                .When(x => x.ParentId.HasValue);
+                    .When(x => x.ParentId.HasValue);
         }
     }
 }

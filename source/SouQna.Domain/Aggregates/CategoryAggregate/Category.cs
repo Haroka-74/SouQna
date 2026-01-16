@@ -1,5 +1,5 @@
-using SouQna.Domain.Aggregates.ProductAggregate;
 using SouQna.Domain.Common;
+using SouQna.Domain.Aggregates.ProductAggregate;
 
 namespace SouQna.Domain.Aggregates.CategoryAggregate
 {

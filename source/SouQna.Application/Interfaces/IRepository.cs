@@ -5,10 +5,11 @@ namespace SouQna.Application.Interfaces
     public interface IRepository<T> where T : class
     {
         Task<(IReadOnlyCollection<T> Items, int TotalCount)> GetPagedAsync(
-            int pageNumber,
-            int pageSize,
+            int pageNumber = 1,
+            int pageSize = 10,
             string? orderBy = null,
             bool isDescending = false,
+            Expression<Func<T, bool>>? predicate = null,
             params Expression<Func<T, object>>[] includes
         );
         Task<T?> FindAsync(Expression<Func<T, bool>> predicate);

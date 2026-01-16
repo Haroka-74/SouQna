@@ -5,8 +5,8 @@ using SouQna.Application.DTOs.Categories;
 namespace SouQna.Application.Features.Categories.Queries.GetCategories
 {
     public record GetCategoriesQuery(
-        int PageNumber,
-        int PageSize,
+        int PageNumber = 1,
+        int PageSize = 10,
         string? OrderBy = null,
         bool IsDescending = false
     ) : IRequest<PagedResult<CategoryDTO>>;

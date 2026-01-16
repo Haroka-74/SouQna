@@ -19,6 +19,7 @@ namespace SouQna.Application.Features.Categories.Queries.GetCategories
                 query.PageSize,
                 query.OrderBy,
                 query.IsDescending,
+                null,
                 c => c.Subcategories
             );
 

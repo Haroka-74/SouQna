@@ -13,7 +13,7 @@ namespace SouQna.Infrastructure.Extensions
         ) where T : class
         {
             if(orderBy is null)
-                return query.OrderBy(t => EF.Property<object>(t, "CreatedAt"));
+                return query.OrderBy(t => EF.Property<object>(t, "Id"));
 
             var property = typeof(T).GetProperty(
                 orderBy,
@@ -21,7 +21,7 @@ namespace SouQna.Infrastructure.Extensions
             );
 
             if(property is null)
-                return query.OrderBy(t => EF.Property<object>(t, "CreatedAt"));
+                return query.OrderBy(t => EF.Property<object>(t, "Id"));
 
             var parameter = Expression.Parameter(typeof(T), "t");
             var propertyAccess = Expression.Property(parameter, property);
@@ -33,7 +33,7 @@ namespace SouQna.Infrastructure.Extensions
                 .First(m => m.Name == methodName && m.GetParameters().Length == 2)
                 .MakeGenericMethod(typeof(T), property.PropertyType);
 
-            return (IQueryable<T>)method.Invoke(null, [query, lambda])!;
+            return (IQueryable<T>) method.Invoke(null, [query, lambda])!;
         }
     }
 }
