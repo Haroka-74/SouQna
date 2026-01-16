@@ -1,7 +1,9 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SouQna.Application.DTOs.Products;
 using SouQna.Presentation.Contracts.Products;
 using SouQna.Application.Features.Products.Commands.AddProduct;
+using SouQna.Application.Features.Products.Queries.GetProduct;
 
 namespace SouQna.Presentation.Controllers
 {
@@ -9,6 +11,13 @@ namespace SouQna.Presentation.Controllers
     [ApiController]
     public class ProductsController(ISender sender) : ControllerBase
     {
+        [HttpGet("{id:guid}")]
+        [ProducesResponseType(typeof(ProductDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetByIdAsync(Guid id)
+            => Ok(await sender.Send(new GetProductQuery(id)));
+
         [HttpPost]
         [Consumes("multipart/form-data")]
         [ProducesResponseType(typeof(AddProductResponse), StatusCodes.Status201Created)]
