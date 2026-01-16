@@ -1,9 +1,12 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SouQna.Application.Common;
+using SouQna.Application.DTOs.Categories;
+using SouQna.Application.Features.Categories.Queries.GetCategory;
 using SouQna.Application.Features.Categories.Commands.AddCategory;
+using SouQna.Application.Features.Categories.Queries.GetCategories;
 using SouQna.Application.Features.Categories.Commands.DeleteCategory;
 using SouQna.Application.Features.Categories.Commands.UpdateCategory;
-using SouQna.Application.Features.Categories.Queries.GetCategoryById;
 
 namespace SouQna.Presentation.Controllers
 {
@@ -11,12 +14,23 @@ namespace SouQna.Presentation.Controllers
     [ApiController]
     public class CategoriesController(ISender sender) : ControllerBase
     {
+        [HttpGet]
+        [ProducesResponseType(typeof(PagedResult<CategoryDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetAllAsync(
+            [FromQuery] int pageNumber,
+            [FromQuery] int pageSize,
+            [FromQuery] string? orderBy = null,
+            [FromQuery] bool isDescending = false
+        )
+            => Ok(await sender.Send(new GetCategoriesQuery(pageNumber, pageSize, orderBy, isDescending)));
+
         [HttpGet("{id:guid}")]
-        [ProducesResponseType(typeof(GetCategoryByIdResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CategoryDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetByIdAsync(Guid id)
-            => Ok(await sender.Send(new GetCategoryByIdQuery(id)));
+            => Ok(await sender.Send(new GetCategoryQuery(id)));
 
         [HttpPost]
         [ProducesResponseType(typeof(AddCategoryResponse), StatusCodes.Status201Created)]

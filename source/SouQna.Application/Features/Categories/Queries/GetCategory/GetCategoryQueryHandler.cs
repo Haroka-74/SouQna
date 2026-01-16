@@ -1,15 +1,16 @@
 using MediatR;
 using SouQna.Application.Exceptions;
 using SouQna.Application.Interfaces;
+using SouQna.Application.DTOs.Categories;
 
-namespace SouQna.Application.Features.Categories.Queries.GetCategoryById
+namespace SouQna.Application.Features.Categories.Queries.GetCategory
 {
-    public class GetCategoryByIdQueryHandler(
+    public class GetCategoryQueryHandler(
         IUnitOfWork unitOfWork
-    ) : IRequestHandler<GetCategoryByIdQuery, GetCategoryByIdResponse>
+    ) : IRequestHandler<GetCategoryQuery, CategoryDTO>
     {
-        public async Task<GetCategoryByIdResponse> Handle(
-            GetCategoryByIdQuery query,
+        public async Task<CategoryDTO> Handle(
+            GetCategoryQuery query,
             CancellationToken cancellationToken
         )
         {
@@ -18,7 +19,7 @@ namespace SouQna.Application.Features.Categories.Queries.GetCategoryById
                 c => c.Subcategories
             ) ?? throw new NotFoundException($"Category with ID {query.Id} not found");
 
-            return new GetCategoryByIdResponse
+            return new CategoryDTO
             {
                 Id = category.Id,
                 Name = category.Name,

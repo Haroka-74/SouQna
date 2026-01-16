@@ -14,9 +14,7 @@ namespace SouQna.Application.Features.Categories.Commands.AddCategory
             CancellationToken cancellationToken
         )
         {
-            var category = await unitOfWork.Categories.FindAsync(c => c.Name == command.Name);
-
-            if(category is not null)
+            if(await unitOfWork.Categories.AnyAsync(c => c.Name == command.Name))
                 throw new ConflictException($"A category with name '{command.Name}' already exists.");
 
             if(command.ParentId.HasValue)
@@ -24,7 +22,7 @@ namespace SouQna.Application.Features.Categories.Commands.AddCategory
                     c => c.Id == command.ParentId.Value
                 ) ?? throw new NotFoundException($"Parent category with ID {command.ParentId.Value} not found");
 
-            category = Category.Create(
+            var category = Category.Create(
                 command.ParentId,
                 command.Name,
                 command.Description

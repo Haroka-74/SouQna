@@ -1,6 +1,6 @@
-namespace SouQna.Application.Features.Categories.Commands.UpdateCategory
+namespace SouQna.Application.DTOs.Categories
 {
-    public class UpdateCategoryResponse
+    public class CategoryDTO
     {
         public Guid Id { get; init; }
         public string Name { get; init; } = string.Empty;

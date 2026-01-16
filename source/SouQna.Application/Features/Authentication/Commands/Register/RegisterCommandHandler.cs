@@ -20,7 +20,7 @@ namespace SouQna.Application.Features.Authentication.Commands.Register
         {
             var normalizedEmail = command.Email.Trim().ToLowerInvariant();
 
-            if(await unitOfWork.Users.FindAsync(u => u.Email == normalizedEmail) is not null)
+            if(await unitOfWork.Users.AnyAsync(u => u.Email == normalizedEmail))
                 throw new ConflictException($"The email address '{command.Email}' is already registered");
 
             var user = User.Create(
