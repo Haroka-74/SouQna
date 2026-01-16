@@ -1,5 +1,4 @@
 using MediatR;
-using SouQna.Application.Exceptions;
 using SouQna.Application.Interfaces;
 
 namespace SouQna.Application.Features.Categories.Commands.DeleteCategory

@@ -2,8 +2,9 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SouQna.Application.DTOs.Products;
 using SouQna.Presentation.Contracts.Products;
-using SouQna.Application.Features.Products.Commands.AddProduct;
 using SouQna.Application.Features.Products.Queries.GetProduct;
+using SouQna.Application.Features.Products.Commands.AddProduct;
+using SouQna.Application.Features.Products.Commands.DeleteProduct;
 
 namespace SouQna.Presentation.Controllers
 {
@@ -37,6 +38,15 @@ namespace SouQna.Presentation.Controllers
                 request.CategoryId
             ));
             return CreatedAtAction("GetById", new { id = result.Id }, result);
+        }
+
+        [HttpDelete("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteAsync(Guid id)
+        {
+            await sender.Send(new DeleteProductCommand(id));
+            return NoContent();
         }
     }
 }

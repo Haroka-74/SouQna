@@ -26,5 +26,19 @@ namespace SouQna.Infrastructure.Services.Files
 
             return $"/{relativeFolder.Replace("\\", "/")}/{uniqueFileName}";
         }
+
+        public Task DeleteFileAsync(string fileUrl)
+        {
+            if(string.IsNullOrWhiteSpace(fileUrl))
+                return Task.CompletedTask;
+
+            var relativePath = fileUrl.TrimStart('/').Replace("/", Path.DirectorySeparatorChar.ToString());
+            var absolutePath = Path.Combine(environment.WebRootPath, relativePath);
+
+            if(File.Exists(absolutePath))
+                File.Delete(absolutePath);
+
+            return Task.CompletedTask;
+        }
     }
 }
