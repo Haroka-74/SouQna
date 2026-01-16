@@ -4,5 +4,6 @@
 appsettings.Development.json
 appsettings.Production.json
 appsettings.json
+wwwroot
 
 .vscode

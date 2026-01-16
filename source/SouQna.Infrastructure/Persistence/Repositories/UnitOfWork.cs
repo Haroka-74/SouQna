@@ -1,5 +1,6 @@
 using SouQna.Application.Interfaces;
 using SouQna.Domain.Aggregates.UserAggregate;
+using SouQna.Domain.Aggregates.ProductAggregate;
 using SouQna.Domain.Aggregates.CategoryAggregate;
 
 namespace SouQna.Infrastructure.Persistence.Repositories
@@ -10,12 +11,14 @@ namespace SouQna.Infrastructure.Persistence.Repositories
 
         public IRepository<User> Users { get; private set; }
         public IRepository<Category> Categories { get; private set; }
+        public IRepository<Product> Products { get; private set; }
 
         public UnitOfWork(SouQnaDbContext context)
         {
             _context = context;
             Users = new Repository<User>(_context);
             Categories = new Repository<Category>(_context);
+            Products = new Repository<Product>(_context);
         }
 
         public async Task SaveChangesAsync() => await _context.SaveChangesAsync();

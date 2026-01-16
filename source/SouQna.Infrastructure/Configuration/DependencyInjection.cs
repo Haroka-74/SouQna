@@ -11,6 +11,7 @@ using SouQna.Infrastructure.Configuration.Settings;
 using SouQna.Infrastructure.Services.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using SouQna.Infrastructure.Persistence.Repositories;
+using SouQna.Infrastructure.Services.Files;
 
 namespace SouQna.Infrastructure.Configuration
 {
@@ -56,6 +57,7 @@ namespace SouQna.Infrastructure.Configuration
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<ICryptoService, CryptoService>();
+            services.AddScoped<IFileService, LocalFileService>();
             services.AddScoped<IJwtTokenService,JwtTokenService>();
             services.AddScoped<IRandomTokenService, RandomTokenService>();
             services.AddScoped<IEmailTemplateService, EmailTemplateService>();

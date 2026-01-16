@@ -28,6 +28,15 @@ namespace SouQna.Infrastructure.Persistence.Configuration
             builder
                 .Navigation(c => c.Subcategories)
                 .UsePropertyAccessMode(PropertyAccessMode.Field);
+
+            builder
+                .HasMany(c => c.Products)
+                .WithOne(p => p.Category)
+                .HasForeignKey(p => p.CategoryId);
+
+            builder
+                .Navigation(c => c.Products)
+                .UsePropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 }

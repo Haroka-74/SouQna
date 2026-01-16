@@ -1,3 +1,4 @@
+using SouQna.Domain.Aggregates.ProductAggregate;
 using SouQna.Domain.Common;
 
 namespace SouQna.Domain.Aggregates.CategoryAggregate
@@ -5,6 +6,7 @@ namespace SouQna.Domain.Aggregates.CategoryAggregate
     public class Category
     {
         private readonly List<Category> _subcategories = [];
+        private readonly List<Product> _products = [];
 
         public Guid Id { get; private set; }
         public Guid? ParentId { get; private set; }
@@ -14,6 +16,7 @@ namespace SouQna.Domain.Aggregates.CategoryAggregate
 
         public Category? Parent { get; private set; }
         public IReadOnlyCollection<Category> Subcategories => _subcategories.AsReadOnly();
+        public IReadOnlyCollection<Product> Products => _products.AsReadOnly();
 
         private Category()
         {
