@@ -7,6 +7,7 @@ using SouQna.Application.Features.Products.Queries.GetProduct;
 using SouQna.Application.Features.Products.Queries.GetProducts;
 using SouQna.Application.Features.Products.Commands.AddProduct;
 using SouQna.Application.Features.Products.Commands.DeleteProduct;
+using SouQna.Application.Features.Products.Commands.UpdateProduct;
 
 namespace SouQna.Presentation.Controllers
 {
@@ -67,6 +68,13 @@ namespace SouQna.Presentation.Controllers
             ));
             return CreatedAtAction("GetById", new { id = result.Id }, result);
         }
+
+        [HttpPut]
+        [ProducesResponseType(typeof(UpdateProductResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateAsync(UpdateProductCommand command)
+            => Ok(await sender.Send(command));
 
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

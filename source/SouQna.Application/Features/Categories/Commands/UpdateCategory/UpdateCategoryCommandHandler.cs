@@ -14,11 +14,10 @@ namespace SouQna.Application.Features.Categories.Commands.UpdateCategory
         )
         {
             var category = await unitOfWork.Categories.FindAsync(
-                c => c.Id == command.Id,
-                c => c.Subcategories
+                c => c.Id == command.Id
             ) ?? throw new NotFoundException($"Category with ID {command.Id} not found");
 
-            category.Update(command.Name, command.Description);
+            category.UpdateDetails(command.Name, command.Description);
             await unitOfWork.SaveChangesAsync();
 
             return new UpdateCategoryResponse
@@ -26,7 +25,6 @@ namespace SouQna.Application.Features.Categories.Commands.UpdateCategory
                 Id = category.Id,
                 Name = category.Name,
                 Description = category.Description,
-                Subcategories = [.. category.Subcategories.Select(c => c.Name)]
             };
         }
     }

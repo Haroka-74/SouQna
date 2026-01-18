@@ -53,7 +53,7 @@ namespace SouQna.Domain.Aggregates.CategoryAggregate
             );
         }
 
-        public void Update(string name, string description)
+        public void UpdateDetails(string name, string description)
         {
             Guard.AgainstNullOrEmpty(name, nameof(name));
             Guard.AgainstNullOrEmpty(description, nameof(description));

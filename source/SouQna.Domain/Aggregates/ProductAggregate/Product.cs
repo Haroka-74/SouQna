@@ -78,5 +78,16 @@ namespace SouQna.Domain.Aggregates.ProductAggregate
                 DateTime.UtcNow
             );
         }
+
+        public void UpdateDetails(string name, string description, decimal price)
+        {
+            Guard.AgainstNullOrEmpty(name, nameof(name));
+            Guard.AgainstNullOrEmpty(description, nameof(description));
+            Guard.AgainstOutOfRange(price, 0m, decimal.MaxValue, nameof(price));
+
+            Name = name;
+            Description = description;
+            Price = price;
+        }
     }
 }
