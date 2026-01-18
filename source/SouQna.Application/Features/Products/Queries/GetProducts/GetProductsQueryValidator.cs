@@ -1,10 +1,10 @@
 using FluentValidation;
 
-namespace SouQna.Application.Features.Categories.Queries.GetCategories
+namespace SouQna.Application.Features.Products.Queries.GetProducts
 {
-    public class GetCategoriesQueryValidator : AbstractValidator<GetCategoriesQuery>
+    public class GetProductsQueryValidator : AbstractValidator<GetProductsQuery>
     {
-        public GetCategoriesQueryValidator()
+        public GetProductsQueryValidator()
         {
             RuleFor(x => x.PageNumber)
                 .GreaterThan(0).WithMessage("Page number must be greater than 0");

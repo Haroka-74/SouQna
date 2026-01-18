@@ -1,8 +1,10 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SouQna.Application.Common;
 using SouQna.Application.DTOs.Products;
 using SouQna.Presentation.Contracts.Products;
 using SouQna.Application.Features.Products.Queries.GetProduct;
+using SouQna.Application.Features.Products.Queries.GetProducts;
 using SouQna.Application.Features.Products.Commands.AddProduct;
 using SouQna.Application.Features.Products.Commands.DeleteProduct;
 
@@ -12,6 +14,32 @@ namespace SouQna.Presentation.Controllers
     [ApiController]
     public class ProductsController(ISender sender) : ControllerBase
     {
+        [HttpGet]
+        [ProducesResponseType(typeof(PagedResult<ProductDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetAllAsync(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] Guid? categoryId = null,
+            [FromQuery] string? searchTerm = null,
+            [FromQuery] bool? isActive = null,
+            [FromQuery] string? orderBy = null,
+            [FromQuery] bool isDescending = false
+        )
+            => Ok(
+                await sender.Send(
+                    new GetProductsQuery(
+                        pageNumber,
+                        pageSize,
+                        categoryId,
+                        searchTerm,
+                        isActive,
+                        orderBy,
+                        isDescending
+                    )
+                )
+            );
+
         [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(ProductDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
