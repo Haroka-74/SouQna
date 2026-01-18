@@ -8,6 +8,8 @@ using SouQna.Application.Features.Products.Queries.GetProducts;
 using SouQna.Application.Features.Products.Commands.AddProduct;
 using SouQna.Application.Features.Products.Commands.DeleteProduct;
 using SouQna.Application.Features.Products.Commands.UpdateProduct;
+using SouQna.Application.Features.Products.Commands.Stock.IncreaseStock;
+using SouQna.Application.Features.Products.Commands.Stock.DecreaseStock;
 
 namespace SouQna.Presentation.Controllers
 {
@@ -83,6 +85,26 @@ namespace SouQna.Presentation.Controllers
         {
             await sender.Send(new DeleteProductCommand(id));
             return NoContent();
+        }
+
+        [HttpPut("increase-stock")]
+        [ProducesResponseType(typeof(IncreaseStockResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> IncreaseStockAsync([FromBody] IncreaseStockCommand command)
+        {
+            var product = await sender.Send(command);
+            return Ok(product);
+        }
+
+        [HttpPut("decrease-stock")]
+        [ProducesResponseType(typeof(DecreaseStockResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DecreaseStockAsync([FromBody] DecreaseStockCommand command)
+        {
+            var product = await sender.Send(command);
+            return Ok(product);
         }
     }
 }

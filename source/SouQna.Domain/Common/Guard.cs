@@ -24,5 +24,12 @@ namespace SouQna.Domain.Common
                     $"{parameterName} must be between {min} and {max}"
                 );
         }
+
+        public static void AgainstNegativeOrZero<T>(T value, string parameterName)
+            where T : struct, IComparable<T>
+        {
+            if(value.CompareTo(default) <= 0)
+                throw new ArgumentException($"{parameterName} must be greater than zero", parameterName);
+        }
     }
 }

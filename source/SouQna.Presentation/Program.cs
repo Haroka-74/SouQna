@@ -50,6 +50,7 @@ builder.Services.AddExceptionHandler<ConflictExceptionHandler>();
 builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
 builder.Services.AddExceptionHandler<AuthenticationExceptionHandler>();
 builder.Services.AddExceptionHandler<ArgumentExceptionHandler>();
+builder.Services.AddExceptionHandler<InsufficientStockExceptionHandler>();
 builder.Services.AddExceptionHandler<ArgumentOutOfRangeExceptionHandler>();
 builder.Services.AddExceptionHandler<InvalidOperationExceptionHandler>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();

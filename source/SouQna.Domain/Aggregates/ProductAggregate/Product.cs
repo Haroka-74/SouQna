@@ -1,5 +1,6 @@
 using SouQna.Domain.Common;
 using SouQna.Domain.Aggregates.CategoryAggregate;
+using SouQna.Domain.Exceptions;
 
 namespace SouQna.Domain.Aggregates.ProductAggregate
 {
@@ -88,6 +89,23 @@ namespace SouQna.Domain.Aggregates.ProductAggregate
             Name = name;
             Description = description;
             Price = price;
+        }
+
+        public void IncreaseStock(int quantity)
+        {
+            Guard.AgainstNegativeOrZero(quantity, nameof(quantity));
+
+            Quantity += quantity;
+        }
+
+        public void DecreaseStock(int quantity)
+        {
+            Guard.AgainstNegativeOrZero(quantity, nameof(quantity));
+
+            if (Quantity < quantity)
+                throw new InsufficientStockException(Quantity, quantity);
+
+            Quantity -= quantity;
         }
     }
 }
