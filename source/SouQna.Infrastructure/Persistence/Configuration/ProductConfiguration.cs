@@ -18,6 +18,16 @@ namespace SouQna.Infrastructure.Persistence.Configuration
             builder
                 .HasIndex(p => p.Name)
                 .IsUnique();
+
+            builder
+                .HasMany(p => p.CartItems)
+                .WithOne(ci => ci.Product)
+                .HasForeignKey(ci => ci.ProductId)
+                .IsRequired();
+
+            builder
+                .Navigation(p => p.CartItems)
+                .UsePropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 }

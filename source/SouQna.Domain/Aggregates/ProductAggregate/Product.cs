@@ -1,11 +1,14 @@
 using SouQna.Domain.Common;
-using SouQna.Domain.Aggregates.CategoryAggregate;
 using SouQna.Domain.Exceptions;
+using SouQna.Domain.Aggregates.CartAggregate;
+using SouQna.Domain.Aggregates.CategoryAggregate;
 
 namespace SouQna.Domain.Aggregates.ProductAggregate
 {
     public class Product
     {
+        private readonly List<CartItem> _cartItems = [];
+
         public Guid Id { get; private set; }
         public Guid CategoryId { get; private set; }
         public string Name { get; private set; }
@@ -17,6 +20,7 @@ namespace SouQna.Domain.Aggregates.ProductAggregate
         public DateTime CreatedAt { get; private set; }
 
         public Category Category { get; private set; }
+        public IReadOnlyCollection<CartItem> CartItems => _cartItems.AsReadOnly();
 
         private Product()
         {
@@ -102,10 +106,13 @@ namespace SouQna.Domain.Aggregates.ProductAggregate
         {
             Guard.AgainstNegativeOrZero(quantity, nameof(quantity));
 
-            if (Quantity < quantity)
+            if(!HasSufficientStock(quantity))
                 throw new InsufficientStockException(Quantity, quantity);
 
             Quantity -= quantity;
         }
+
+        public bool HasSufficientStock(int requestedQuantity)
+            => IsActive && requestedQuantity <= Quantity;
     }
 }

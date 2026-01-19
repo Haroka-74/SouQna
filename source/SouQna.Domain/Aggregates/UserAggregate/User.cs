@@ -1,4 +1,5 @@
 using SouQna.Domain.Common;
+using SouQna.Domain.Aggregates.CartAggregate;
 
 namespace SouQna.Domain.Aggregates.UserAggregate
 {
@@ -16,6 +17,7 @@ namespace SouQna.Domain.Aggregates.UserAggregate
         public DateTime? EmailConfirmationExpires { get; private set; }
         public DateTime CreatedAt { get; private set; }
 
+        public Cart Cart { get; private set; }
         public IReadOnlyCollection<RefreshToken> RefreshTokens => _refreshTokens.AsReadOnly();
 
         private User()
@@ -25,6 +27,7 @@ namespace SouQna.Domain.Aggregates.UserAggregate
             Email = string.Empty;
             PasswordHash = string.Empty;
             EmailConfirmed = false;
+            Cart = null!;
         }
 
         private User(
@@ -45,6 +48,7 @@ namespace SouQna.Domain.Aggregates.UserAggregate
             EmailConfirmationToken = null;
             EmailConfirmationExpires = null;
             CreatedAt = createdAt;
+            Cart = null!;
         }
 
         public static User Create(string firstName, string lastName, string email, string passwordHash)

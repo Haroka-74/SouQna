@@ -25,6 +25,13 @@ namespace SouQna.Domain.Common
                 );
         }
 
+        public static void AgainstNegative<T>(T value, string parameterName)
+            where T : struct, IComparable<T>
+        {
+            if(value.CompareTo(default) < 0)
+                throw new ArgumentException($"{parameterName} must be positive", parameterName);
+        }
+
         public static void AgainstNegativeOrZero<T>(T value, string parameterName)
             where T : struct, IComparable<T>
         {
