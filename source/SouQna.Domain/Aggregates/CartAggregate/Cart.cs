@@ -59,5 +59,13 @@ namespace SouQna.Domain.Aggregates.CartAggregate
                 _cartItems.Add(item);
             }
         }
+
+        public void RemoveItem(Guid productId)
+        {
+            var item = _cartItems.FirstOrDefault(ci => ci.ProductId == productId);
+
+            if(item is not null)
+                _cartItems.Remove(item);
+        }
     }
 }

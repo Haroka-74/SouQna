@@ -14,9 +14,6 @@ namespace SouQna.Application.Features.Carts.Commands.AddItemToCart
             CancellationToken cancellationToken
         )
         {
-            if(!await unitOfWork.Users.AnyAsync(u => u.Id == command.UserId))
-                throw new NotFoundException($"User with ID {command.UserId} not found");
-
             var product = await unitOfWork.Products.FindAsync(
                 p => p.Id == command.ProductId
             ) ?? throw new NotFoundException($"Product with ID {command.ProductId} not found");
