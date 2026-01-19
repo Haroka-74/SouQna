@@ -7,6 +7,16 @@ namespace SouQna.Infrastructure.Persistence.Repositories
 {
     public class Repository<T>(SouQnaDbContext context) : IRepository<T> where T : class
     {
+        public async Task<IReadOnlyCollection<T>> FindAllAsync(Expression<Func<T, bool>>? predicate)
+        {
+            IQueryable<T> query = context.Set<T>().AsNoTracking();
+
+            if(predicate is not null)
+                query = query.Where(predicate);
+
+            return await query.ToListAsync();
+        }
+
         public async Task<(IReadOnlyCollection<T> Items, int TotalCount)> GetPagedAsync(
             int pageNumber = 1,
             int pageSize = 10,

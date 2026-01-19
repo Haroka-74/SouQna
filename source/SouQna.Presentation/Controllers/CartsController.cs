@@ -1,5 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SouQna.Application.DTOs.Carts;
+using SouQna.Application.Features.Carts.Queries.GetCart;
 using SouQna.Application.Features.Carts.Commands.AddItemToCart;
 using SouQna.Application.Features.Carts.Commands.RemoveItemFromCart;
 
@@ -9,6 +11,12 @@ namespace SouQna.Presentation.Controllers
     [ApiController]
     public class CartsController(ISender sender) : ControllerBase
     {
+        [HttpGet("{userId:guid}")]
+        [ProducesResponseType(typeof(CartDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetCartAsync(Guid userId)
+            => Ok(await sender.Send(new GetCartQuery(userId)));
+
         [HttpPost("items")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -4,6 +4,7 @@ namespace SouQna.Application.Interfaces
 {
     public interface IRepository<T> where T : class
     {
+        Task<IReadOnlyCollection<T>> FindAllAsync(Expression<Func<T, bool>>? predicate);
         Task<(IReadOnlyCollection<T> Items, int TotalCount)> GetPagedAsync(
             int pageNumber = 1,
             int pageSize = 10,

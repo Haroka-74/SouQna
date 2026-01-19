@@ -16,6 +16,10 @@ namespace SouQna.Domain.Aggregates.CartAggregate
         public User User { get; private set; }
         public IReadOnlyCollection<CartItem> CartItems => _cartItems.AsReadOnly();
 
+        public bool IsEmpty => _cartItems.Count == 0;
+        public int TotalItems => _cartItems.Sum(item => item.Quantity);
+        public decimal TotalAmount => _cartItems.Sum(item => item.Subtotal);
+
         private Cart() => User = null!;
 
         private Cart(Guid id, Guid userId, DateTime createdAt)

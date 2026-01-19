@@ -15,6 +15,8 @@ namespace SouQna.Domain.Aggregates.CartAggregate
         public Cart Cart { get; private set; }
         public Product Product { get; private set; }
 
+        public decimal Subtotal => PriceAtAddition * Quantity;
+
         private CartItem()
         {
             Cart = null!;
