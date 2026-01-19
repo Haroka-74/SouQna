@@ -4,6 +4,7 @@ using SouQna.Application.DTOs.Carts;
 using SouQna.Application.Features.Carts.Queries.GetCart;
 using SouQna.Application.Features.Carts.Commands.AddItemToCart;
 using SouQna.Application.Features.Carts.Commands.RemoveItemFromCart;
+using SouQna.Application.Features.Carts.Commands.UpdateCartItemQuantity;
 
 namespace SouQna.Presentation.Controllers
 {
@@ -22,6 +23,15 @@ namespace SouQna.Presentation.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> AddItemToCartAsync(AddItemToCartCommand command)
+        {
+            await sender.Send(command);
+            return Ok();
+        }
+
+        [HttpPut("items/update")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateItemQuantityAsync(UpdateCartItemQuantityCommand command)
         {
             await sender.Send(command);
             return Ok();

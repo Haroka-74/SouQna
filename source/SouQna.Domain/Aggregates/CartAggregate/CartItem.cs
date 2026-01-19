@@ -71,6 +71,13 @@ namespace SouQna.Domain.Aggregates.CartAggregate
             Quantity += amount;
         }
 
+        public void UpdateQuantity(int newQuantity)
+        {
+            Guard.AgainstNegativeOrZero(newQuantity, nameof(newQuantity));
+
+            Quantity = newQuantity;
+        }
+
         public void DecreaseQuantity(int amount)
         {
             Guard.AgainstNegativeOrZero(amount, nameof(amount));

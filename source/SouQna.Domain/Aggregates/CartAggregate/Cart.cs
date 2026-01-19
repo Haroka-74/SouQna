@@ -71,5 +71,18 @@ namespace SouQna.Domain.Aggregates.CartAggregate
             if(item is not null)
                 _cartItems.Remove(item);
         }
+
+        public void UpdateItemQuantity(Guid productId, int newQuantity)
+        {
+            Guard.AgainstNullOrEmpty(productId.ToString(), nameof(newQuantity));
+            Guard.AgainstNegativeOrZero(newQuantity, nameof(newQuantity));
+
+            var item = _cartItems.FirstOrDefault(ci => ci.ProductId == productId);
+
+            if(item is null)
+                return;
+
+            item.UpdateQuantity(newQuantity);
+        }
     }
 }
