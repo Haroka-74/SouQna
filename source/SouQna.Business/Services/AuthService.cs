@@ -9,6 +9,7 @@ namespace SouQna.Business.Services
 {
     public class AuthService(
         IUnitOfWork unitOfWork,
+        IJwtService jwtService,
         IValidationService validationService
     ) : IAuthService
     {
@@ -39,6 +40,20 @@ namespace SouQna.Business.Services
                 $"{user.FirstName} {user.LastName}",
                 user.Email
             );
+        }
+
+        public async Task<LoginUserResponse> LoginAsync(LoginUserRequest request)
+        {
+            await validationService.ValidateAsync(request);
+
+            var normalizedEmail = request.Email.Trim().ToLowerInvariant();
+
+            var user = await unitOfWork.Users.FindAsync(u => u.Email == normalizedEmail);
+
+            if(user is null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
+                throw new UnauthorizedException("Invalid email or password");
+
+            return new LoginUserResponse(jwtService.Generate(user));
         }
     }
 }

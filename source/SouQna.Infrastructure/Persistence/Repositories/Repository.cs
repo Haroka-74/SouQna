@@ -6,6 +6,9 @@ namespace SouQna.Infrastructure.Persistence.Repositories
 {
     public class Repository<T>(SouQnaDbContext context) : IRepository<T> where T : class
     {
+        public async Task<T?> FindAsync(Expression<Func<T, bool>> predicate)
+            => await context.Set<T>().FirstOrDefaultAsync(predicate);
+
         public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
             => await context.Set<T>().AnyAsync(predicate);
 

@@ -13,5 +13,10 @@ namespace SouQna.Presentation.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> RegisterAsync(RegisterUserRequest request)
             => CreatedAtAction("Register", await authService.RegisterAsync(request));
+
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> LoginAsync(LoginUserRequest request)
+            => Ok(await authService.LoginAsync(request));
     }
 }

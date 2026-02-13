@@ -8,6 +8,7 @@ namespace SouQna.Presentation.Configurations
         {
             services.AddExceptionHandler<ValidationExceptionHandler>();
             services.AddExceptionHandler<ConflictExceptionHandler>();
+            services.AddExceptionHandler<UnauthorizedExceptionHandler>();
             services.AddExceptionHandler<GlobalExceptionHandler>();
 
             services.AddProblemDetails();
