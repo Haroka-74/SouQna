@@ -14,8 +14,9 @@ namespace SouQna.Business.Configurations
         {
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
-            services.AddScoped<IValidationService, ValidationService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IValidationService, ValidationService>();
 
             return services;
         }

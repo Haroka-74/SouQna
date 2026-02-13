@@ -8,12 +8,14 @@ namespace SouQna.Infrastructure.Persistence.Repositories
         private readonly SouQnaDbContext _context;
 
         public IRepository<User> Users { get; private set; }
+        public IRepository<Product> Products { get; private set; }
 
         public UnitOfWork(SouQnaDbContext context)
         {
             _context = context;
 
             Users = new Repository<User>(_context);
+            Products = new Repository<Product>(_context);
         }
 
         public async Task SaveChangesAsync() => await _context.SaveChangesAsync();

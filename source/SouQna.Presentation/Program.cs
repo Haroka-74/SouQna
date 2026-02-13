@@ -6,6 +6,10 @@ using SouQna.Infrastructure.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers(options =>
+{
+    options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+});
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(c =>
 {
