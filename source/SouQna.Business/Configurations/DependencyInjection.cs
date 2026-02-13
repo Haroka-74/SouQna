@@ -1,5 +1,7 @@
 using FluentValidation;
 using System.Reflection;
+using SouQna.Business.Services;
+using SouQna.Business.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace SouQna.Business.Configurations
@@ -11,6 +13,9 @@ namespace SouQna.Business.Configurations
         )
         {
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+            services.AddScoped<IValidationService, ValidationService>();
+            services.AddScoped<IAuthService, AuthService>();
 
             return services;
         }
