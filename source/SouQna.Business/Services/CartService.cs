@@ -39,6 +39,27 @@ namespace SouQna.Business.Services
             );
         }
 
+        public async Task UpdateCartItemAsync(Guid userId, Guid productId, UpdateCartItemRequest request)
+        {
+            await validationService.ValidateAsync(request);
+
+            var cart = await unitOfWork.Carts.FindAsync(
+                c => c.UserId == userId,
+                c => c.CartItems
+            );
+
+            if(cart is null)
+                return;
+
+            var existingItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
+
+            if(existingItem is null)
+                return;
+
+            existingItem.Quantity = request.Quantity;
+            await unitOfWork.SaveChangesAsync();
+        }
+
         public async Task AddToCartAsync(Guid userId, AddToCartRequest request)
         {
             await validationService.ValidateAsync(request);

@@ -18,6 +18,15 @@ namespace SouQna.Presentation.Controllers
             return Ok(await cartService.GetCartAsync(userId));
         }
 
+        [HttpPatch("items/{productId:guid}")]
+        [Authorize]
+        public async Task<IActionResult> UpdateQuantityAsync(Guid productId, UpdateCartItemRequest request)
+        {
+            _ = Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId);
+            await cartService.UpdateCartItemAsync(userId, productId, request);
+            return NoContent();
+        }
+
         [HttpPost("items")]
         [Authorize]
         public async Task<IActionResult> AddToCartAsync(AddToCartRequest request)
