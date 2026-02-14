@@ -18,21 +18,30 @@ namespace SouQna.Presentation.Controllers
             return Ok(await cartService.GetCartAsync(userId));
         }
 
-        [HttpPatch("items/{productId:guid}")]
-        [Authorize]
-        public async Task<IActionResult> UpdateQuantityAsync(Guid productId, UpdateCartItemRequest request)
-        {
-            _ = Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId);
-            await cartService.UpdateCartItemAsync(userId, productId, request);
-            return NoContent();
-        }
-
         [HttpPost("items")]
         [Authorize]
         public async Task<IActionResult> AddToCartAsync(AddToCartRequest request)
         {
             _ = Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId);
             await cartService.AddToCartAsync(userId, request);
+            return NoContent();
+        }
+
+        [HttpPatch("items/{productId:guid}")]
+        [Authorize]
+        public async Task<IActionResult> UpdateCartItemAsync(Guid productId, UpdateCartItemRequest request)
+        {
+            _ = Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId);
+            await cartService.UpdateCartItemAsync(userId, productId, request);
+            return NoContent();
+        }
+
+        [HttpDelete("items/{productId:guid}")]
+        [Authorize]
+        public async Task<IActionResult> RemoveFromCartAsync(Guid productId)
+        {
+            _ = Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId);
+            await cartService.RemoveFromCartAsync(userId, productId);
             return NoContent();
         }
     }

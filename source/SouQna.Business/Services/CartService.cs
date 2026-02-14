@@ -39,27 +39,6 @@ namespace SouQna.Business.Services
             );
         }
 
-        public async Task UpdateCartItemAsync(Guid userId, Guid productId, UpdateCartItemRequest request)
-        {
-            await validationService.ValidateAsync(request);
-
-            var cart = await unitOfWork.Carts.FindAsync(
-                c => c.UserId == userId,
-                c => c.CartItems
-            );
-
-            if(cart is null)
-                return;
-
-            var existingItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
-
-            if(existingItem is null)
-                return;
-
-            existingItem.Quantity = request.Quantity;
-            await unitOfWork.SaveChangesAsync();
-        }
-
         public async Task AddToCartAsync(Guid userId, AddToCartRequest request)
         {
             await validationService.ValidateAsync(request);
@@ -106,6 +85,48 @@ namespace SouQna.Business.Services
                 await unitOfWork.CartItems.AddAsync(existingItem);
             }
 
+            cart.UpdatedAt = DateTime.UtcNow;
+            await unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task UpdateCartItemAsync(Guid userId, Guid productId, UpdateCartItemRequest request)
+        {
+            await validationService.ValidateAsync(request);
+
+            var cart = await unitOfWork.Carts.FindAsync(
+                c => c.UserId == userId,
+                c => c.CartItems
+            );
+
+            if(cart is null)
+                return;
+
+            var existingItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
+
+            if(existingItem is null)
+                return;
+
+            existingItem.Quantity = request.Quantity;
+            cart.UpdatedAt = DateTime.UtcNow;
+            await unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task RemoveFromCartAsync(Guid userId, Guid productId)
+        {
+            var cart = await unitOfWork.Carts.FindAsync(
+                c => c.UserId == userId,
+                c => c.CartItems
+            );
+
+            if(cart is null)
+                return;
+
+            var existingItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
+
+            if(existingItem is null)
+                return;
+
+            await unitOfWork.CartItems.DeleteAsync(existingItem);
             cart.UpdatedAt = DateTime.UtcNow;
             await unitOfWork.SaveChangesAsync();
         }
