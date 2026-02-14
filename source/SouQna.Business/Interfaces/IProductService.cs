@@ -7,6 +7,7 @@ namespace SouQna.Business.Interfaces
     public interface IProductService
     {
         Task<PagedResult<ProductResponse>> GetPagedProductsAsync(GetProductsRequest request);
+        Task<ProductResponse> GetProductAsync(Guid id);
         Task<ProductResponse> AddProductAsync(AddProductRequest request);
     }
 }

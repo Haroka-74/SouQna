@@ -11,8 +11,13 @@ namespace SouQna.Presentation.Controllers
     {
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetProducts([FromQuery] GetProductsRequest request)
+        public async Task<IActionResult> GetProductsAsync([FromQuery] GetProductsRequest request)
             => Ok(await productService.GetPagedProductsAsync(request));
+
+        [HttpGet("{id:guid}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetProductAsync(Guid id)
+            => Ok(await productService.GetProductAsync(id));
 
         [HttpPost]
         [Authorize(Roles = "admin")]
