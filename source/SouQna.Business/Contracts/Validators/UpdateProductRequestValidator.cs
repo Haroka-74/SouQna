@@ -3,9 +3,9 @@ using SouQna.Business.Contracts.Requests;
 
 namespace SouQna.Business.Contracts.Validators
 {
-    public class AddProductRequestValidator : AbstractValidator<AddProductRequest>
+    public class UpdateProductRequestValidator : AbstractValidator<UpdateProductRequest>
     {
-        public AddProductRequestValidator()
+        public UpdateProductRequestValidator()
         {
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Name is required")
@@ -16,14 +16,16 @@ namespace SouQna.Business.Contracts.Validators
                 .MaximumLength(1000).WithMessage("Description must not exceed 1000 characters");
 
             RuleFor(x => x.Image)
-                .NotNull().WithMessage("Image is required")
                 .Must(file =>
                 {
-                    if(file is null || file.Length < 4)
+                    if (file is null)
+                        return true;
+
+                    if (file.Length < 4)
                         return false;
 
                     using var stream = file.OpenReadStream();
-                    if(!stream.CanRead)
+                    if (!stream.CanRead)
                         return false;
 
                     var header = new byte[4];
@@ -33,7 +35,8 @@ namespace SouQna.Business.Contracts.Validators
                     bool isJpeg = header[0] == 0xFF && header[1] == 0xD8 && header[2] == 0xFF;
 
                     return isPng || isJpeg;
-                }).WithMessage("Invalid image format. Only PNG and JPEG files are allowed");
+                }).WithMessage("Invalid image format. Only PNG and JPEG files are allowed")
+                .When(x => x.Image is not null); // Only validate when image is provided
 
             RuleFor(x => x.Price)
                 .GreaterThan(0).WithMessage("Price must be greater than 0");

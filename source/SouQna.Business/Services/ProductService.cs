@@ -107,6 +107,31 @@ namespace SouQna.Business.Services
             );
         }
 
+        public async Task UpdateProductAsync(Guid id, UpdateProductRequest request)
+        {
+            await validationService.ValidateAsync(request);
+
+            var product = await unitOfWork.Products.FindAsync(
+                p => p.Id == id
+            );
+
+            if(product is null)
+                return;
+
+            product.Name = request.Name.Trim();
+            product.Description = request.Description.Trim();
+            product.Price = request.Price;
+
+            if(request.Image is not null)
+            {
+                using var memoryStream = new MemoryStream();
+                await request.Image.CopyToAsync(memoryStream);
+                product.Image = Convert.ToBase64String(memoryStream.ToArray());
+            }
+
+            await unitOfWork.SaveChangesAsync();
+        }
+
         public async Task DeleteProductAsync(Guid id)
         {
             var product = await unitOfWork.Products.FindAsync(

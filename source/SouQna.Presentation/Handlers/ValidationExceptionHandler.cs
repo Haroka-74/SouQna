@@ -26,7 +26,7 @@ namespace SouQna.Presentation.Handlers
             {
                 Title = "Validation Error",
                 Status = StatusCodes.Status400BadRequest,
-                Detail = "One or more validation errors occurred."
+                Detail = "One or more validation errors occurred"
             };
 
             httpContext.Response.StatusCode = problemDetails.Status.Value;
