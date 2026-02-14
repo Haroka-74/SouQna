@@ -1,3 +1,4 @@
+using SouQna.Business.Common;
 using SouQna.Business.Contracts.Requests;
 using SouQna.Business.Contracts.Responses;
 
@@ -5,6 +6,7 @@ namespace SouQna.Business.Interfaces
 {
     public interface IProductService
     {
-        Task<AddProductResponse> AddProductAsync(AddProductRequest request);
+        Task<PagedResult<ProductResponse>> GetPagedProductsAsync(GetProductsRequest request);
+        Task<ProductResponse> AddProductAsync(AddProductRequest request);
     }
 }

@@ -1,6 +1,6 @@
 namespace SouQna.Business.Contracts.Responses
 {
-    public record AddProductResponse(
+    public record ProductResponse(
         Guid Id,
         string Name,
         string Description,

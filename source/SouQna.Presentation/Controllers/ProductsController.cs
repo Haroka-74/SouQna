@@ -9,6 +9,11 @@ namespace SouQna.Presentation.Controllers
     [ApiController]
     public class ProductController(IProductService productService) : ControllerBase
     {
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetProducts([FromQuery] GetProductsRequest request)
+            => Ok(await productService.GetPagedProductsAsync(request));
+
         [HttpPost]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> AddProductAsync([FromForm] AddProductRequest request)
