@@ -106,5 +106,18 @@ namespace SouQna.Business.Services
                 product.Image
             );
         }
+
+        public async Task DeleteProductAsync(Guid id)
+        {
+            var product = await unitOfWork.Products.FindAsync(
+                p => p.Id == id
+            );
+
+            if(product is null)
+                return;
+
+            await unitOfWork.Products.DeleteAsync(product);
+            await unitOfWork.SaveChangesAsync();
+        }
     }
 }

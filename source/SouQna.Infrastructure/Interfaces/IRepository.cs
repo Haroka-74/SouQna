@@ -13,5 +13,6 @@ namespace SouQna.Infrastructure.Interfaces
         Task<T?> FindAsync(Expression<Func<T, bool>> predicate);
         Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
         Task<T> AddAsync(T entity);
+        Task DeleteAsync(T entity);
     }
 }

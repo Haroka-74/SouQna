@@ -42,5 +42,11 @@ namespace SouQna.Infrastructure.Persistence.Repositories
             await context.Set<T>().AddAsync(entity);
             return entity;
         }
+
+        public Task DeleteAsync(T entity)
+        {
+            context.Set<T>().Remove(entity);
+            return Task.CompletedTask;
+        }
     }
 }

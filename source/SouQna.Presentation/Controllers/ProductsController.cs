@@ -23,5 +23,13 @@ namespace SouQna.Presentation.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> AddProductAsync([FromForm] AddProductRequest request)
             => CreatedAtAction("AddProduct", await productService.AddProductAsync(request));
+
+        [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> DeleteAsync(Guid id)
+        {
+            await productService.DeleteProductAsync(id);
+            return NoContent();
+        }
     }
 }
