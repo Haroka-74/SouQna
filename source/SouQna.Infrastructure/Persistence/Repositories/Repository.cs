@@ -13,7 +13,7 @@ namespace SouQna.Infrastructure.Persistence.Repositories
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null
         )
         {
-            IQueryable<T> query = context.Set<T>();
+            IQueryable<T> query = context.Set<T>().AsNoTracking();
 
             if(filter is not null)
                 query = query.Where(filter);
@@ -44,6 +44,21 @@ namespace SouQna.Infrastructure.Persistence.Repositories
             foreach(var include in includes)
             {
                 query = query.Include(include);
+            }
+
+            return await query.FirstOrDefaultAsync(predicate);
+        }
+
+        public async Task<T?> FindAsync(
+            Expression<Func<T, bool>> predicate,
+            params string[] includePaths
+        )
+        {
+            IQueryable<T> query = context.Set<T>();
+
+            foreach(var includePath in includePaths)
+            {
+                query = query.Include(includePath);
             }
 
             return await query.FirstOrDefaultAsync(predicate);

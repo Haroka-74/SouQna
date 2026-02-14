@@ -10,6 +10,14 @@ namespace SouQna.Presentation.Controllers
     [ApiController]
     public class CartsController(ICartService cartService) : ControllerBase
     {
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetCartAsync()
+        {
+            _ = Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId);
+            return Ok(await cartService.GetCartAsync(userId));
+        }
+
         [HttpPost("items")]
         [Authorize]
         public async Task<IActionResult> AddToCartAsync(AddToCartRequest request)

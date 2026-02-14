@@ -3,6 +3,7 @@ using SouQna.Business.Exceptions;
 using SouQna.Infrastructure.Entities;
 using SouQna.Infrastructure.Interfaces;
 using SouQna.Business.Contracts.Requests;
+using SouQna.Business.Contracts.Responses;
 
 namespace SouQna.Business.Services
 {
@@ -11,6 +12,33 @@ namespace SouQna.Business.Services
         IValidationService validationService
     ) : ICartService
     {
+        public async Task<CartResponse> GetCartAsync(Guid userId)
+        {
+            var cart = await unitOfWork.Carts.FindAsync(
+                c => c.UserId == userId,
+                "CartItems.Product"
+            );
+
+            if(cart is null || cart.CartItems.Count == 0)
+                return new CartResponse(0, 0, []);
+
+            var items = cart.CartItems.Select(item => new CartItemResponse(
+                item.Id,
+                item.ProductId,
+                item.Product.Name,
+                item.Product.Image,
+                item.PriceAtAddition,
+                item.Quantity,
+                item.PriceAtAddition * item.Quantity
+            )).ToList();
+
+            return new CartResponse(
+                items.Sum(i => i.Subtotal),
+                items.Sum(i => i.Quantity),
+                items
+            );
+        }
+
         public async Task AddToCartAsync(Guid userId, AddToCartRequest request)
         {
             await validationService.ValidateAsync(request);
