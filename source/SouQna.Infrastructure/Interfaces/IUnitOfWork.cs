@@ -6,6 +6,8 @@ namespace SouQna.Infrastructure.Interfaces
     {
         IRepository<User> Users { get; }
         IRepository<Product> Products { get; }
+        IRepository<Cart> Carts { get; }
+        IRepository<CartItem> CartItems { get; }
         Task SaveChangesAsync();
     }
 }

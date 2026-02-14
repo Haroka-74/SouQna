@@ -7,7 +7,7 @@ namespace SouQna.Presentation.Controllers
 {
     [Route("api/products")]
     [ApiController]
-    public class ProductController(IProductService productService) : ControllerBase
+    public class ProductsController(IProductService productService) : ControllerBase
     {
         [HttpGet]
         [AllowAnonymous]
