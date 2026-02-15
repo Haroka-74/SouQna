@@ -8,6 +8,8 @@ namespace SouQna.Infrastructure.Interfaces
         IRepository<Product> Products { get; }
         IRepository<Cart> Carts { get; }
         IRepository<CartItem> CartItems { get; }
+        IRepository<Order> Orders { get; }
+        IRepository<OrderItem> OrderItems { get; }
         Task SaveChangesAsync();
     }
 }

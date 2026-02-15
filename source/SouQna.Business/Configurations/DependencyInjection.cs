@@ -16,6 +16,7 @@ namespace SouQna.Business.Configurations
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IValidationService, ValidationService>();
 

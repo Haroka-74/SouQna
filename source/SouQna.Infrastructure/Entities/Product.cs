@@ -10,5 +10,6 @@ namespace SouQna.Infrastructure.Entities
         public DateTime CreatedAt { get; set; }
 
         public ICollection<CartItem> CartItems { get; } = [];
+        public ICollection<OrderItem> OrderItems { get; } = [];
     }
 }
