@@ -70,6 +70,7 @@ namespace SouQna.Business.Services
             if(existingItem is not null)
             {
                 existingItem.Quantity += request.Quantity;
+                existingItem.PriceAtAddition = product.Price;
             }
             else
             {

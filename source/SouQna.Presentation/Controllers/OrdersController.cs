@@ -10,6 +10,14 @@ namespace SouQna.Presentation.Controllers
     [ApiController]
     public class OrdersController(IOrderService orderService) : ControllerBase
     {
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetUserOrdersAsync([FromQuery] GetOrdersRequest request)
+        {
+            _ = Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId);
+            return Ok(await orderService.GetUserOrdersAsync(userId, request));
+        }
+
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> CreateOrderAsync(CreateOrderRequest request)

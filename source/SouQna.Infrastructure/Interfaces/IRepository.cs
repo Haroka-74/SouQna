@@ -10,6 +10,13 @@ namespace SouQna.Infrastructure.Interfaces
             Expression<Func<T, bool>>? filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null
         );
+        Task<(IReadOnlyCollection<T> Items, int TotalCount)> GetPagedAsync(
+            int pageNumber = 1,
+            int pageSize = 10,
+            Expression<Func<T, bool>>? filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+            params string[] includePaths
+        );
         Task<T?> FindAsync(Expression<Func<T, bool>> predicate);
         Task<T?> FindAsync(
             Expression<Func<T, bool>> predicate,

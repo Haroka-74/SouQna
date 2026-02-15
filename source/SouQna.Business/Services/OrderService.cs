@@ -1,3 +1,4 @@
+using SouQna.Business.Common;
 using SouQna.Business.Exceptions;
 using SouQna.Business.Interfaces;
 using SouQna.Infrastructure.Enums;
@@ -13,6 +14,40 @@ namespace SouQna.Business.Services
         IValidationService validationService
     ) : IOrderService
     {
+        public async Task<PagedResult<OrderSummaryResponse>> GetUserOrdersAsync(
+            Guid userId,
+            GetOrdersRequest request
+        )
+        {
+            await validationService.ValidateAsync(request);
+
+            var (items, totalCount) = await unitOfWork.Orders.GetPagedAsync(
+                request.PageNumber,
+                request.PageSize,
+                o =>
+                    o.UserId == userId &&
+                    (!request.Status.HasValue || o.Status == request.Status.Value),
+                query => query.OrderByDescending(o => o.CreatedAt),
+                "OrderItems"
+            );
+
+            var summaries = items.Select(item => new OrderSummaryResponse(
+                item.Id,
+                item.OrderNumber,
+                item.Status,
+                item.OrderItems.Count,
+                item.Total,
+                item.CreatedAt
+            )).ToList();
+
+            return new PagedResult<OrderSummaryResponse>(
+                request.PageNumber,
+                request.PageSize,
+                totalCount,
+                summaries.AsReadOnly()
+            );
+        }
+
         public async Task<CreateOrderResponse> CreateOrderAsync(Guid userId, CreateOrderRequest request)
         {
             await validationService.ValidateAsync(request);

@@ -1,3 +1,4 @@
+using SouQna.Business.Common;
 using SouQna.Business.Contracts.Requests;
 using SouQna.Business.Contracts.Responses;
 
@@ -6,5 +7,6 @@ namespace SouQna.Business.Interfaces
     public interface IOrderService
     {
         Task<CreateOrderResponse> CreateOrderAsync(Guid userId, CreateOrderRequest request);
+        Task<PagedResult<OrderSummaryResponse>> GetUserOrdersAsync(Guid userId, GetOrdersRequest request);
     }
 }

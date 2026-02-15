@@ -1,5 +1,6 @@
 using Microsoft.OpenApi.Models;
 using SouQna.Business.Configurations;
+using System.Text.Json.Serialization;
 using SouQna.Infrastructure.Persistence;
 using SouQna.Presentation.Configurations;
 using SouQna.Infrastructure.Configurations;
@@ -10,7 +11,10 @@ builder.Services.AddControllers(options =>
 {
     options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
 });
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
