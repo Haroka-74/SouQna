@@ -20,6 +20,7 @@ namespace SouQna.Infrastructure.Entities
         public DateTime? CancelledAt { get; set; }
 
         public User User { get; set; } = null!;
+        public Payment Payment { get; set; } = null!;
         public ICollection<OrderItem> OrderItems { get; } = [];
     }
 }

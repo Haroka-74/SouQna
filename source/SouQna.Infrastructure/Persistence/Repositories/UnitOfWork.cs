@@ -13,6 +13,7 @@ namespace SouQna.Infrastructure.Persistence.Repositories
         public IRepository<CartItem> CartItems { get; private set; }
         public IRepository<Order> Orders { get; private set; }
         public IRepository<OrderItem> OrderItems { get; private set; }
+        public IRepository<Payment> Payments { get; private set; }
 
         public UnitOfWork(SouQnaDbContext context)
         {
@@ -24,6 +25,7 @@ namespace SouQna.Infrastructure.Persistence.Repositories
             CartItems = new Repository<CartItem>(_context);
             Orders = new Repository<Order>(_context);
             OrderItems = new Repository<OrderItem>(_context);
+            Payments = new Repository<Payment>(_context);
         }
 
         public async Task SaveChangesAsync() => await _context.SaveChangesAsync();

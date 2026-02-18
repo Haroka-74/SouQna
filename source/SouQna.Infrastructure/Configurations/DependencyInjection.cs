@@ -6,9 +6,9 @@ using SouQna.Infrastructure.Interfaces;
 using SouQna.Infrastructure.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using SouQna.Infrastructure.Configurations.Settings;
 using SouQna.Infrastructure.Persistence.Repositories;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace SouQna.Infrastructure.Configurations
 {
@@ -22,6 +22,10 @@ namespace SouQna.Infrastructure.Configurations
             var jwtSettings = new JwtSettings();
             configuration.GetSection("JWT").Bind(jwtSettings);
             services.AddSingleton(jwtSettings);
+
+            var paymobSettings = new PaymobSettings();
+            configuration.GetSection("Paymob").Bind(paymobSettings);
+            services.AddSingleton(paymobSettings);
 
             services.AddDbContextPool<SouQnaDbContext>(options =>
             {

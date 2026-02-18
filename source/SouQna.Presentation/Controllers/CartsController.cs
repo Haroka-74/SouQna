@@ -1,6 +1,6 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using SouQna.Business.Interfaces;
+using SouQna.Presentation.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using SouQna.Business.Contracts.Requests;
 
@@ -13,17 +13,13 @@ namespace SouQna.Presentation.Controllers
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetCartAsync()
-        {
-            _ = Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId);
-            return Ok(await cartService.GetCartAsync(userId));
-        }
+            => Ok(await cartService.GetCartAsync(User.GetUserId()));
 
         [HttpPost("items")]
         [Authorize]
         public async Task<IActionResult> AddToCartAsync(AddToCartRequest request)
         {
-            _ = Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId);
-            await cartService.AddToCartAsync(userId, request);
+            await cartService.AddToCartAsync(User.GetUserId(), request);
             return NoContent();
         }
 
@@ -31,8 +27,7 @@ namespace SouQna.Presentation.Controllers
         [Authorize]
         public async Task<IActionResult> UpdateCartItemAsync(Guid productId, UpdateCartItemRequest request)
         {
-            _ = Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId);
-            await cartService.UpdateCartItemAsync(userId, productId, request);
+            await cartService.UpdateCartItemAsync(User.GetUserId(), productId, request);
             return NoContent();
         }
 
@@ -40,8 +35,7 @@ namespace SouQna.Presentation.Controllers
         [Authorize]
         public async Task<IActionResult> RemoveFromCartAsync(Guid productId)
         {
-            _ = Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId);
-            await cartService.RemoveFromCartAsync(userId, productId);
+            await cartService.RemoveFromCartAsync(User.GetUserId(), productId);
             return NoContent();
         }
     }
