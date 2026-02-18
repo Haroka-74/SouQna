@@ -12,5 +12,16 @@ namespace SouQna.Presentation.Controllers
         [Authorize]
         public async Task<IActionResult> CreatePaymentIntentAsync(Guid orderId)
             => Ok(new { checkoutUrl = await paymentService.CreatePaymentIntentAsync(orderId) });
+
+        [HttpPost("webhook")]
+        public async Task<IActionResult> ProcessPaymentWebhookAsync([FromQuery] string hmac)
+        {
+            await paymentService.ProcessPaymentWebhookAsync(
+                await new StreamReader(Request.Body).ReadToEndAsync(),
+                hmac
+            );
+
+            return Ok();
+        }
     }
 }

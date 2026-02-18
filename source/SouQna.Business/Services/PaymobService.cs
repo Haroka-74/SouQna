@@ -1,9 +1,11 @@
+using System.Text;
 using System.Text.Json;
 using System.Net.Http.Json;
 using System.Net.Http.Headers;
 using SouQna.Business.Interfaces;
 using SouQna.Business.Exceptions;
 using SouQna.Infrastructure.Enums;
+using System.Security.Cryptography;
 using SouQna.Infrastructure.Entities;
 using SouQna.Infrastructure.Interfaces;
 using SouQna.Infrastructure.Configurations.Settings;
@@ -13,7 +15,8 @@ namespace SouQna.Business.Services
     public class PaymobService(
         HttpClient client,
         IUnitOfWork unitOfWork,
-        PaymobSettings settings
+        PaymobSettings paymobSettings,
+        ServerSettings serverSettings
     ) : IPaymentService
     {
         public async Task<string> CreatePaymentIntentAsync(Guid orderId)
@@ -40,7 +43,7 @@ namespace SouQna.Business.Services
                     throw new ConflictException($"Order with (id: {orderId}) is already paid");
             }
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", settings.SecretKey);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", paymobSettings.SecretKey);
 
             var subtotal = order.OrderItems.Sum(oi => oi.Price * oi.Quantity);
             var taxAndFees = order.Total - subtotal;
@@ -82,7 +85,7 @@ namespace SouQna.Business.Services
                 },
                 special_reference = $"{orderId}_{Guid.NewGuid()}",
                 expiration = 3600,
-                notification_url = "https://webhook.site/58637ab6-b4d5-4e6b-b21f-86ead656d220",
+                notification_url = $"{serverSettings.BaseAddress}/api/payments/webhook",
                 redirection_url = "https://frontend.com/payment-result"
             };
 
@@ -114,7 +117,84 @@ namespace SouQna.Business.Services
             await unitOfWork.Payments.AddAsync(payment);
             await unitOfWork.SaveChangesAsync();
 
-            return $"{settings.BaseAddress}/unifiedcheckout/?publicKey={settings.PublicKey}&clientSecret={clientSecret}";
+            return $"{paymobSettings.BaseAddress}/unifiedcheckout/?publicKey={paymobSettings.PublicKey}&clientSecret={clientSecret}";
+        }
+
+        public async Task ProcessPaymentWebhookAsync(string json, string hmac)
+        {
+            using var document = JsonDocument.Parse(json);
+
+            var obj = document.RootElement.GetProperty("obj");
+
+            var concatenation =
+                obj.GetProperty("amount_cents").GetRawText().Replace("\"", "") +
+                obj.GetProperty("created_at").GetRawText().Replace("\"", "") +
+                obj.GetProperty("currency").GetRawText().Replace("\"", "") +
+                obj.GetProperty("error_occured").GetRawText().Replace("\"", "").ToLower() +
+                obj.GetProperty("has_parent_transaction").GetRawText().Replace("\"", "").ToLower() +
+                obj.GetProperty("id").GetRawText().Replace("\"", "") +
+                obj.GetProperty("integration_id").GetRawText().Replace("\"", "") +
+                obj.GetProperty("is_3d_secure").GetRawText().Replace("\"", "").ToLower() +
+                obj.GetProperty("is_auth").GetRawText().Replace("\"", "").ToLower() +
+                obj.GetProperty("is_capture").GetRawText().Replace("\"", "").ToLower() +
+                obj.GetProperty("is_refunded").GetRawText().Replace("\"", "").ToLower() +
+                obj.GetProperty("is_standalone_payment").GetRawText().Replace("\"", "").ToLower() +
+                obj.GetProperty("is_voided").GetRawText().Replace("\"", "").ToLower() +
+                obj.GetProperty("order").GetProperty("id").GetRawText().Replace("\"", "") +
+                obj.GetProperty("owner").GetRawText().Replace("\"", "") +
+                obj.GetProperty("pending").GetRawText().Replace("\"", "").ToLower() +
+                obj.GetProperty("source_data").GetProperty("pan").GetRawText().Replace("\"", "") +
+                obj.GetProperty("source_data").GetProperty("sub_type").GetRawText().Replace("\"", "") +
+                obj.GetProperty("source_data").GetProperty("type").GetRawText().Replace("\"", "") +
+                obj.GetProperty("success").GetRawText().Replace("\"", "").ToLower();
+
+            using var hasher = new HMACSHA512(
+                Encoding.UTF8.GetBytes(paymobSettings.HmacSecret)
+            );
+
+            var calculated = Convert.ToHexStringLower(
+                hasher.ComputeHash(
+                    Encoding.UTF8.GetBytes(concatenation)
+                )
+            );
+
+            if(calculated != hmac)
+                throw new UnauthorizedException("Invalid HMAC");
+
+            if(!Guid.TryParse(
+                obj
+                    .GetProperty("payment_key_claims")
+                    .GetProperty("extra")
+                    .GetProperty("order_id")
+                    .GetString(),
+                out var orderId
+                )
+            )
+                return;
+
+            var payment = await unitOfWork.Payments.FindAsync(
+                p => p.OrderId == orderId,
+                p => p.Order
+            );
+
+            if(payment is null)
+                return;
+
+            bool success = obj.GetProperty("success").GetBoolean();
+
+            if(success)
+            {
+                payment.Status = PaymentStatus.Succeeded;
+                payment.TransactionId = obj.GetProperty("id").GetRawText();
+                payment.Order.Status = OrderStatus.Confirmed;
+                payment.Order.ConfirmedAt = DateTime.UtcNow;
+            }
+            else
+            {
+                payment.Status = PaymentStatus.Failed;
+            }
+
+            await unitOfWork.SaveChangesAsync();
         }
     }
 }

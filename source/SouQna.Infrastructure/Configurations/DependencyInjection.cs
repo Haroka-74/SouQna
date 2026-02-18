@@ -27,6 +27,10 @@ namespace SouQna.Infrastructure.Configurations
             configuration.GetSection("Paymob").Bind(paymobSettings);
             services.AddSingleton(paymobSettings);
 
+            var serverSettings = new ServerSettings();
+            configuration.GetSection("Server").Bind(serverSettings);
+            services.AddSingleton(serverSettings);
+
             services.AddDbContextPool<SouQnaDbContext>(options =>
             {
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
