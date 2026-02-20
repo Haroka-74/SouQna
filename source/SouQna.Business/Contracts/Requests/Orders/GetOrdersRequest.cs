@@ -1,6 +1,6 @@
 using SouQna.Infrastructure.Enums;
 
-namespace SouQna.Business.Contracts.Requests
+namespace SouQna.Business.Contracts.Requests.Orders
 {
     public record GetOrdersRequest(
         int PageNumber = 1,

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SouQna.Business.Interfaces;
-using SouQna.Business.Contracts.Requests;
 using Microsoft.AspNetCore.Authorization;
+using SouQna.Business.Contracts.Requests.Products;
 
 namespace SouQna.Presentation.Controllers
 {
@@ -12,7 +12,7 @@ namespace SouQna.Presentation.Controllers
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> GetProductsAsync([FromQuery] GetProductsRequest request)
-            => Ok(await productService.GetPagedProductsAsync(request));
+            => Ok(await productService.GetProductsAsync(request));
 
         [HttpGet("{id:guid}")]
         [AllowAnonymous]
@@ -22,7 +22,10 @@ namespace SouQna.Presentation.Controllers
         [HttpPost]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> AddProductAsync([FromForm] AddProductRequest request)
-            => CreatedAtAction("AddProduct", await productService.AddProductAsync(request));
+        {
+            var result = await productService.AddProductAsync(request);
+            return CreatedAtAction(nameof(GetProductAsync), new { id = result.Id }, result);
+        }
 
         [HttpPut("{id:guid}")]
         [Authorize(Roles = "admin")]

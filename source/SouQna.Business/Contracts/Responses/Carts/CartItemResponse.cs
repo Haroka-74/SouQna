@@ -1,4 +1,4 @@
-namespace SouQna.Business.Contracts.Responses
+namespace SouQna.Business.Contracts.Responses.Carts
 {
     public record CartItemResponse(
         Guid Id,

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using SouQna.Business.Interfaces;
 using SouQna.Presentation.Extensions;
 using Microsoft.AspNetCore.Authorization;
-using SouQna.Business.Contracts.Requests;
+using SouQna.Business.Contracts.Requests.Orders;
 
 namespace SouQna.Presentation.Controllers
 {
@@ -18,6 +18,6 @@ namespace SouQna.Presentation.Controllers
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> CreateOrderAsync(CreateOrderRequest request)
-            => CreatedAtAction("CreateOrder", await orderService.CreateOrderAsync(User.GetUserId(), request));
+            => CreatedAtAction("CreateOrder", await orderService.CreateOrderAsync(User.GetUserId(), request)); // create get order by id and refer to it
     }
 }

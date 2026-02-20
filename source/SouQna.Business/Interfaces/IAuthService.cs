@@ -1,11 +1,11 @@
-using SouQna.Business.Contracts.Requests;
-using SouQna.Business.Contracts.Responses;
+using SouQna.Business.Contracts.Requests.Authentication;
+using SouQna.Business.Contracts.Responses.Authentication;
 
 namespace SouQna.Business.Interfaces
 {
     public interface IAuthService
     {
-        Task<RegisterUserResponse> RegisterAsync(RegisterUserRequest request);
-        Task<LoginUserResponse> LoginAsync(LoginUserRequest request);
+        Task<RegisterResponse> RegisterAsync(RegisterRequest request);
+        Task<LoginResponse> LoginAsync(LoginRequest request);
     }
 }

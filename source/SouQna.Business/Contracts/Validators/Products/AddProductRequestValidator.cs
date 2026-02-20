@@ -1,7 +1,7 @@
 using FluentValidation;
-using SouQna.Business.Contracts.Requests;
+using SouQna.Business.Contracts.Requests.Products;
 
-namespace SouQna.Business.Contracts.Validators
+namespace SouQna.Business.Contracts.Validators.Products
 {
     public class AddProductRequestValidator : AbstractValidator<AddProductRequest>
     {

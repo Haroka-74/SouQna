@@ -1,4 +1,4 @@
-namespace SouQna.Business.Contracts.Requests
+namespace SouQna.Business.Contracts.Requests.Products
 {
     public record GetProductsRequest(
         int PageNumber = 1,

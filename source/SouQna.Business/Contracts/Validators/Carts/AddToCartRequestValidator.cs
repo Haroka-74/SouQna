@@ -1,7 +1,7 @@
 using FluentValidation;
-using SouQna.Business.Contracts.Requests;
+using SouQna.Business.Contracts.Requests.Carts;
 
-namespace SouQna.Business.Contracts.Validators
+namespace SouQna.Business.Contracts.Validators.Carts
 {
     public class AddToCartRequestValidator : AbstractValidator<AddToCartRequest>
     {

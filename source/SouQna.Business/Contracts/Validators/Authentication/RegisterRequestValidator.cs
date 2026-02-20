@@ -1,11 +1,11 @@
 using FluentValidation;
-using SouQna.Business.Contracts.Requests;
+using SouQna.Business.Contracts.Requests.Authentication;
 
-namespace SouQna.Business.Contracts.Validators
+namespace SouQna.Business.Contracts.Validators.Authentication
 {
-    public class RegisterUserRequestValidator : AbstractValidator<RegisterUserRequest>
+    public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
     {
-        public RegisterUserRequestValidator()
+        public RegisterRequestValidator()
         {
             RuleFor(x => x.FirstName)
                 .NotEmpty().WithMessage("First name is required")

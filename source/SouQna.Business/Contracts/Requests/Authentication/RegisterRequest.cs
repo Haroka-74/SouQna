@@ -1,6 +1,6 @@
-namespace SouQna.Business.Contracts.Requests
+namespace SouQna.Business.Contracts.Requests.Authentication
 {
-    public record RegisterUserRequest(
+    public record RegisterRequest(
         string FirstName,
         string LastName,
         string Email,

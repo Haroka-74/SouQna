@@ -4,8 +4,8 @@ using SouQna.Business.Interfaces;
 using SouQna.Business.Exceptions;
 using SouQna.Infrastructure.Entities;
 using SouQna.Infrastructure.Interfaces;
-using SouQna.Business.Contracts.Requests;
-using SouQna.Business.Contracts.Responses;
+using SouQna.Business.Contracts.Requests.Products;
+using SouQna.Business.Contracts.Responses.Products;
 
 namespace SouQna.Business.Services
 {
@@ -14,7 +14,7 @@ namespace SouQna.Business.Services
         IValidationService validationService
     ) : IProductService
     {
-        public async Task<PagedResult<ProductResponse>> GetPagedProductsAsync(GetProductsRequest request)
+        public async Task<PagedResult<ProductResponse>> GetProductsAsync(GetProductsRequest request)
         {
             await validationService.ValidateAsync(request);
 

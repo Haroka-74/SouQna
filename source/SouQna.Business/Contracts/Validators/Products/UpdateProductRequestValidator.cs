@@ -1,7 +1,7 @@
 using FluentValidation;
-using SouQna.Business.Contracts.Requests;
+using SouQna.Business.Contracts.Requests.Products;
 
-namespace SouQna.Business.Contracts.Validators
+namespace SouQna.Business.Contracts.Validators.Products
 {
     public class UpdateProductRequestValidator : AbstractValidator<UpdateProductRequest>
     {
@@ -18,10 +18,7 @@ namespace SouQna.Business.Contracts.Validators
             RuleFor(x => x.Image)
                 .Must(file =>
                 {
-                    if (file is null)
-                        return true;
-
-                    if (file.Length < 4)
+                    if (file!.Length < 4)
                         return false;
 
                     using var stream = file.OpenReadStream();
@@ -35,8 +32,8 @@ namespace SouQna.Business.Contracts.Validators
                     bool isJpeg = header[0] == 0xFF && header[1] == 0xD8 && header[2] == 0xFF;
 
                     return isPng || isJpeg;
-                }).WithMessage("Invalid image format. Only PNG and JPEG files are allowed")
-                .When(x => x.Image is not null); // Only validate when image is provided
+                }).When(x => x.Image is not null)
+                    .WithMessage("Invalid image format. Only PNG and JPEG files are allowed");
 
             RuleFor(x => x.Price)
                 .GreaterThan(0).WithMessage("Price must be greater than 0");

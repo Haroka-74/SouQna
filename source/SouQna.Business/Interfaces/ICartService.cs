@@ -1,5 +1,5 @@
-using SouQna.Business.Contracts.Requests;
-using SouQna.Business.Contracts.Responses;
+using SouQna.Business.Contracts.Requests.Carts;
+using SouQna.Business.Contracts.Responses.Carts;
 
 namespace SouQna.Business.Interfaces
 {

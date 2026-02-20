@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using SouQna.Business.Interfaces;
 using SouQna.Presentation.Extensions;
 using Microsoft.AspNetCore.Authorization;
-using SouQna.Business.Contracts.Requests;
+using SouQna.Business.Contracts.Requests.Carts;
 
 namespace SouQna.Presentation.Controllers
 {

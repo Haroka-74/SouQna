@@ -2,8 +2,8 @@ using SouQna.Business.Exceptions;
 using SouQna.Business.Interfaces;
 using SouQna.Infrastructure.Entities;
 using SouQna.Infrastructure.Interfaces;
-using SouQna.Business.Contracts.Requests;
-using SouQna.Business.Contracts.Responses;
+using SouQna.Business.Contracts.Requests.Authentication;
+using SouQna.Business.Contracts.Responses.Authentication;
 
 namespace SouQna.Business.Services
 {
@@ -13,7 +13,7 @@ namespace SouQna.Business.Services
         IValidationService validationService
     ) : IAuthService
     {
-        public async Task<RegisterUserResponse> RegisterAsync(RegisterUserRequest request)
+        public async Task<RegisterResponse> RegisterAsync(RegisterRequest request)
         {
             await validationService.ValidateAsync(request);
 
@@ -35,14 +35,14 @@ namespace SouQna.Business.Services
             await unitOfWork.Users.AddAsync(user);
             await unitOfWork.SaveChangesAsync();
 
-            return new RegisterUserResponse(
+            return new RegisterResponse(
                 user.Id,
                 $"{user.FirstName} {user.LastName}",
                 user.Email
             );
         }
 
-        public async Task<LoginUserResponse> LoginAsync(LoginUserRequest request)
+        public async Task<LoginResponse> LoginAsync(LoginRequest request)
         {
             await validationService.ValidateAsync(request);
 
@@ -51,9 +51,9 @@ namespace SouQna.Business.Services
             var user = await unitOfWork.Users.FindAsync(u => u.Email == normalizedEmail);
 
             if(user is null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
-                throw new UnauthorizedException("Invalid email or password");
+                throw new UnauthorizedException("Invalid Email or Password");
 
-            return new LoginUserResponse(jwtService.Generate(user));
+            return new LoginResponse(jwtService.Generate(user));
         }
     }
 }

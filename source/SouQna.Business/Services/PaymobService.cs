@@ -188,6 +188,17 @@ namespace SouQna.Business.Services
                 payment.TransactionId = obj.GetProperty("id").GetRawText();
                 payment.Order.Status = OrderStatus.Confirmed;
                 payment.Order.ConfirmedAt = DateTime.UtcNow;
+
+                var userId = payment.Order.UserId;
+                var cart = await unitOfWork.Carts.FindAsync(
+                    c => c.UserId == userId,
+                    c => c.CartItems
+                );
+
+                if(cart is not null && cart.CartItems.Count != 0)
+                {
+                    await unitOfWork.CartItems.DeleteRangeAsync(cart.CartItems);
+                }
             }
             else
             {

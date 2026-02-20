@@ -2,8 +2,8 @@ using SouQna.Business.Interfaces;
 using SouQna.Business.Exceptions;
 using SouQna.Infrastructure.Entities;
 using SouQna.Infrastructure.Interfaces;
-using SouQna.Business.Contracts.Requests;
-using SouQna.Business.Contracts.Responses;
+using SouQna.Business.Contracts.Requests.Carts;
+using SouQna.Business.Contracts.Responses.Carts;
 
 namespace SouQna.Business.Services
 {

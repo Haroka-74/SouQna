@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using SouQna.Infrastructure.Persistence;
 using SouQna.Presentation.Configurations;
 using SouQna.Infrastructure.Configurations;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

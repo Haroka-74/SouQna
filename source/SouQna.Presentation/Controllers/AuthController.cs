@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SouQna.Business.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using SouQna.Business.Contracts.Requests;
+using SouQna.Business.Contracts.Requests.Authentication;
 
 namespace SouQna.Presentation.Controllers
 {
@@ -11,12 +11,12 @@ namespace SouQna.Presentation.Controllers
     {
         [HttpPost("register")]
         [AllowAnonymous]
-        public async Task<IActionResult> RegisterAsync(RegisterUserRequest request)
-            => CreatedAtAction("Register", await authService.RegisterAsync(request));
+        public async Task<IActionResult> RegisterAsync(RegisterRequest request)
+            => Ok(await authService.RegisterAsync(request));
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<IActionResult> LoginAsync(LoginUserRequest request)
+        public async Task<IActionResult> LoginAsync(LoginRequest request)
             => Ok(await authService.LoginAsync(request));
     }
 }

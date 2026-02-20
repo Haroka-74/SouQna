@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace SouQna.Business.Contracts.Requests
+namespace SouQna.Business.Contracts.Requests.Products
 {
     public record UpdateProductRequest(
         string Name,

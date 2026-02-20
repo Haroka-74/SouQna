@@ -1,11 +1,11 @@
 using FluentValidation;
-using SouQna.Business.Contracts.Requests;
+using SouQna.Business.Contracts.Requests.Authentication;
 
-namespace SouQna.Business.Contracts.Validators
+namespace SouQna.Business.Contracts.Validators.Authentication
 {
-    public class LoginUserRequestValidator : AbstractValidator<LoginUserRequest>
+    public class LoginRequestValidator : AbstractValidator<LoginRequest>
     {
-        public LoginUserRequestValidator()
+        public LoginRequestValidator()
         {
             RuleFor(x => x.Email)
                 .NotEmpty().WithMessage("Email is required")
