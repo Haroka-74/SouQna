@@ -48,6 +48,44 @@ namespace SouQna.Business.Services
             );
         }
 
+        public async Task<OrderDetailResponse> GetOrderAsync(Guid userId, Guid orderId)
+        {
+            var order = await unitOfWork.Orders.FindAsync(
+                o => o.Id == orderId && o.UserId == userId,
+                o => o.OrderItems
+            ) ?? throw new NotFoundException($"Order with (id: {orderId}) was not found");
+
+            var items = order.OrderItems.Select(oi => new OrderItemResponse(
+                oi.Id,
+                oi.ProductId,
+                oi.ProductName,
+                oi.ProductDescription,
+                oi.ProductImage,
+                oi.Price,
+                oi.Quantity,
+                oi.Price * oi.Quantity
+            )).ToList();
+
+            return new OrderDetailResponse(
+                order.Id,
+                order.OrderNumber,
+                order.Status,
+                order.Total,
+                new ShippingInfoResponse(
+                    order.ShippingFullName,
+                    order.ShippingAddressLine,
+                    order.ShippingCity,
+                    order.ShippingPhoneNumber
+                ),
+                items,
+                order.CreatedAt,
+                order.ConfirmedAt,
+                order.ShippedAt,
+                order.DeliveredAt,
+                order.CancelledAt
+            );
+        }
+
         public async Task<CreateOrderResponse> CreateOrderAsync(Guid userId, CreateOrderRequest request)
         {
             await validationService.ValidateAsync(request);

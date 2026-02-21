@@ -24,7 +24,7 @@ namespace SouQna.Presentation.Controllers
         public async Task<IActionResult> AddProductAsync([FromForm] AddProductRequest request)
         {
             var result = await productService.AddProductAsync(request);
-            return CreatedAtAction(nameof(GetProductAsync), new { id = result.Id }, result);
+            return CreatedAtAction("GetProduct", new { id = result.Id }, result);
         }
 
         [HttpPut("{id:guid}")]

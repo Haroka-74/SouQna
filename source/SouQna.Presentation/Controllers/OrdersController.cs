@@ -15,6 +15,11 @@ namespace SouQna.Presentation.Controllers
         public async Task<IActionResult> GetUserOrdersAsync([FromQuery] GetOrdersRequest request)
             => Ok(await orderService.GetUserOrdersAsync(User.GetUserId(), request));
 
+        [HttpGet("{id:guid}")]
+        [Authorize]
+        public async Task<IActionResult> GetOrderAsync(Guid id)
+            => Ok(await orderService.GetOrderAsync(User.GetUserId(), id));
+
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> CreateOrderAsync(CreateOrderRequest request)
