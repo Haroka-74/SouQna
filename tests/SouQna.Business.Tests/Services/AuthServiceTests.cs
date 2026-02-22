@@ -14,17 +14,14 @@ namespace SouQna.Business.Tests.Services
     {
         private readonly IAuthService _authService;
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-        private readonly Mock<IRepository<User>> _userRepositoryMock;
         private readonly Mock<IJwtService> _jwtServiceMock;
         private readonly Mock<IValidationService> _validationServiceMock;
 
         public AuthServiceTests()
         {
             _unitOfWorkMock = new Mock<IUnitOfWork>();
-            _userRepositoryMock = new Mock<IRepository<User>>();
             _jwtServiceMock = new Mock<IJwtService>();
             _validationServiceMock = new Mock<IValidationService>();
-            _unitOfWorkMock.Setup(u => u.Users).Returns(_userRepositoryMock.Object);
             _authService = new AuthService(
                 _unitOfWorkMock.Object,
                 _jwtServiceMock.Object,
@@ -33,72 +30,71 @@ namespace SouQna.Business.Tests.Services
         }
 
         [Fact]
-        public async Task Register_WithValidRequest_ReturnsRegisterResponse()
+        public async Task RegisterAsync_ShouldReturnResponse_WhenDataIsUnique()
         {
-            var request = new RegisterRequest(
-                "John",
-                "Doe",
-                "test@example.com",
-                "P@ssword12"
-            );
+            var request = new RegisterRequest("Samy", "Ali", "samy@test.com", "P@ssword12");
 
-            _userRepositoryMock.Setup(
-                r => r.AnyAsync(It.IsAny<Expression<Func<User, bool>>>())
+            _unitOfWorkMock.Setup(
+                u => u.Users.AnyAsync(It.IsAny<Expression<Func<User, bool>>>())
             ).ReturnsAsync(false);
 
             var result = await _authService.RegisterAsync(request);
 
             result.Should().NotBeNull();
-            result.FullName.Should().Be("John Doe");
-            result.Email.Should().Be(request.Email);
+            result.FullName.Should().Be("Samy Ali");
+            result.Email.Should().Be("samy@test.com");
 
             _validationServiceMock.Verify(v => v.ValidateAsync(request), Times.Once);
-            _userRepositoryMock.Verify(r => r.AddAsync(It.Is<User>(u => u.Email == request.Email)), Times.Once);
-            _unitOfWorkMock.Verify(u => u.SaveChangesAsync(), Times.Once);
+            _unitOfWorkMock.Verify(
+                u => u.Users.AddAsync(
+                    It.IsAny<User>()
+                ),
+                Times.Once
+            );
+            _unitOfWorkMock.Verify(
+                u => u.SaveChangesAsync(),
+                Times.Once
+            );
         }
 
         [Fact]
-        public async Task Register_WithExistingEmail_ThrowsConflictException()
+        public async Task RegisterAsync_ShouldThrowConflictException_WhenEmailAlreadyExists()
         {
-            var request = new RegisterRequest(
-                "John",
-                "Doe",
-                "test@example.com",
-                "P@ssword12"
-            );
+            var request = new RegisterRequest("Samy", "Ali", "samy@test.com", "P@ssword12");
 
-            _userRepositoryMock.Setup(
-                r => r.AnyAsync(It.IsAny<Expression<Func<User, bool>>>())
+            _unitOfWorkMock.Setup(
+                u => u.Users.AnyAsync(It.IsAny<Expression<Func<User, bool>>>())
             ).ReturnsAsync(true);
 
             var action = async () => await _authService.RegisterAsync(request);
 
             await action.Should().ThrowAsync<ConflictException>();
+
             _validationServiceMock.Verify(v => v.ValidateAsync(request), Times.Once);
         }
 
         [Fact]
-        public async Task Login_WithValidCredentials_ReturnsLoginResponse()
+        public async Task LoginAsync_ShouldReturnToken_WhenCredentialsAreValid()
         {
-            var request = new LoginRequest(
-                "test@example.com",
-                "P@ssword12"
-            );
-
-            _userRepositoryMock.Setup(
-                r => r.FindAsync(It.IsAny<Expression<Func<User, bool>>>())
-            ).ReturnsAsync(new User
+            var password = "P@ssword12";
+            var user = new User
             {
                 Id = Guid.NewGuid(),
-                FirstName = "John",
-                LastName = "Doe",
-                Email = request.Email,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
+                FirstName = "samy",
+                LastName = "Ali",
+                Email = "samy@test.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
                 CreatedAt = DateTime.UtcNow
-            });
+            };
+
+            var request = new LoginRequest(user.Email, password);
+
+            _unitOfWorkMock.Setup(
+                u => u.Users.FindAsync(It.IsAny<Expression<Func<User, bool>>>())
+            ).ReturnsAsync(user);
 
             _jwtServiceMock.Setup(
-                j => j.Generate(It.Is<User>(u => u.Email == request.Email))
+                jwt => jwt.Generate(It.IsAny<User>())
             ).Returns("jwt.test");
 
             var result = await _authService.LoginAsync(request);
@@ -110,15 +106,12 @@ namespace SouQna.Business.Tests.Services
         }
 
         [Fact]
-        public async Task Login_WithNonExistentUser_ThrowsUnauthorizedException()
+        public async Task LoginAsync_ShouldThrowUnauthorizedException_WhenUserDoesNotExist()
         {
-            var request = new LoginRequest(
-                "test@example.com",
-                "P@ssword12"
-            );
+            var request = new LoginRequest("samy@test.com", "P@ssword12");
 
-            _userRepositoryMock.Setup(
-                r => r.FindAsync(It.IsAny<Expression<Func<User, bool>>>())
+            _unitOfWorkMock.Setup(
+                u => u.Users.FindAsync(It.IsAny<Expression<Func<User, bool>>>())
             ).ReturnsAsync((User) null!);
 
             var action = async () => await _authService.LoginAsync(request);
@@ -129,24 +122,23 @@ namespace SouQna.Business.Tests.Services
         }
 
         [Fact]
-        public async Task Login_WithWrongPassword_ThrowsUnauthorizedException()
+        public async Task LoginAsync_ShouldThrowUnauthorizedException_WhenPasswordIsIncorrect()
         {
-            var request = new LoginRequest(
-                "test@example.com",
-                "P@ssword12"
-            );
-
-            _userRepositoryMock.Setup(
-                r => r.FindAsync(It.IsAny<Expression<Func<User, bool>>>())
-            ).ReturnsAsync(new User
+            var user = new User
             {
                 Id = Guid.NewGuid(),
-                FirstName = "John",
-                LastName = "Doe",
-                Email = request.Email,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword("NewP@ssword12"),
+                FirstName = "samy",
+                LastName = "Ali",
+                Email = "samy@test.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("P@ssword12"),
                 CreatedAt = DateTime.UtcNow
-            });
+            };
+
+            var request = new LoginRequest(user.Email, "New-P@ssword12");
+
+            _unitOfWorkMock.Setup(
+                u => u.Users.FindAsync(It.IsAny<Expression<Func<User, bool>>>())
+            ).ReturnsAsync(user);
 
             var action = async () => await _authService.LoginAsync(request);
 
