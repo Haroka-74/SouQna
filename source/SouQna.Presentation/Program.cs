@@ -1,10 +1,9 @@
+using SouQna.Application;
+using SouQna.Presentation;
+using SouQna.Infrastructure;
 using Microsoft.OpenApi.Models;
-using SouQna.Business.Configurations;
 using System.Text.Json.Serialization;
 using SouQna.Infrastructure.Persistence;
-using SouQna.Presentation.Configurations;
-using SouQna.Infrastructure.Configurations;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,9 +48,9 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-builder.Services.AddBusiness();
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplication();
 builder.Services.AddExceptionHandlers();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 

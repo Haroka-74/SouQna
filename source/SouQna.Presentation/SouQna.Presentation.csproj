@@ -11,7 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SouQna.Business\SouQna.Business.csproj" />
+    <ProjectReference Include="..\SouQna.Application\SouQna.Application.csproj" />
+    <ProjectReference Include="..\SouQna.Infrastructure\SouQna.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

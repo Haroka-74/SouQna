@@ -1,5 +1,5 @@
+using SouQna.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using SouQna.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace SouQna.Infrastructure.Persistence.Configurations
@@ -8,17 +8,17 @@ namespace SouQna.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-            builder.HasKey(p => p.Id);
             builder.ToTable("products");
+
+            builder.HasKey(p => p.Id);
             builder.Property(p => p.Id).HasColumnName("id");
             builder.Property(p => p.Id).ValueGeneratedNever();
+
             builder.Property(p => p.Name).HasColumnName("name");
+            builder.Property(p => p.Description).HasColumnName("description");
             builder.Property(p => p.Image).HasColumnName("image");
             builder.Property(p => p.Price).HasColumnName("price");
             builder.Property(p => p.CreatedAt).HasColumnName("created_at");
-            builder.Property(p => p.Description).HasColumnName("description");
-            builder.HasMany(p => p.CartItems).WithOne(ci => ci.Product).HasForeignKey(ci => ci.ProductId).IsRequired();
-            builder.HasMany(p => p.OrderItems).WithOne(oi => oi.Product).HasForeignKey(oi => oi.ProductId).IsRequired();
         }
     }
 }

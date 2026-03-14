@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SouQna.Business.Exceptions;
+using SouQna.Application.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 
 namespace SouQna.Presentation.Handlers

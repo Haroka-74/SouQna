@@ -1,10 +1,10 @@
 using System.Text;
+using SouQna.Domain.Entities;
 using System.Security.Claims;
+using SouQna.Application.Interfaces;
 using Microsoft.IdentityModel.Tokens;
-using SouQna.Infrastructure.Entities;
+using SouQna.Infrastructure.Settings;
 using System.IdentityModel.Tokens.Jwt;
-using SouQna.Infrastructure.Interfaces;
-using SouQna.Infrastructure.Configurations.Settings;
 
 namespace SouQna.Infrastructure.Services
 {
