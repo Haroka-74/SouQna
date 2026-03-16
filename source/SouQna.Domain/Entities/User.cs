@@ -9,12 +9,15 @@ namespace SouQna.Domain.Entities
         public string PasswordHash { get; private set; }
         public DateTime CreatedAt { get; private set; }
 
+        public Cart Cart { get; private set; }
+
         private User()
         {
             FirstName = string.Empty;
             LastName = string.Empty;
             Email = string.Empty;
             PasswordHash = string.Empty;
+            Cart = null!;
         }
 
         private User(Guid id, string firstName, string lastName, string email, string passwordHash, DateTime createdAt)
@@ -25,6 +28,7 @@ namespace SouQna.Domain.Entities
             Email = email;
             PasswordHash = passwordHash;
             CreatedAt = createdAt;
+            Cart = null!;
         }
 
         public static User Create(string firstName, string lastName, string email, string passwordHash)

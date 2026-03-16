@@ -9,11 +9,17 @@ namespace SouQna.Domain.Entities
         public decimal Price { get; private set; }
         public DateTime CreatedAt { get; private set; }
 
+        public Inventory Inventory { get; private set; }
+
+        private readonly List<CartItem> _cartItems = [];
+        public IReadOnlyCollection<CartItem> CartItems => _cartItems.AsReadOnly();
+
         private Product()
         {
             Name = string.Empty;
             Description = string.Empty;
             Image = string.Empty;
+            Inventory = null!;
         }
 
         private Product(Guid id, string name, string description, string image, decimal price, DateTime createdAt)
@@ -24,6 +30,7 @@ namespace SouQna.Domain.Entities
             Image = image;
             Price = price;
             CreatedAt = createdAt;
+            Inventory = null!;
         }
     }
 }

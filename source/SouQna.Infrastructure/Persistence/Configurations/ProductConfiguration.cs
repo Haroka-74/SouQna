@@ -19,6 +19,18 @@ namespace SouQna.Infrastructure.Persistence.Configurations
             builder.Property(p => p.Image).HasColumnName("image");
             builder.Property(p => p.Price).HasColumnName("price");
             builder.Property(p => p.CreatedAt).HasColumnName("created_at");
+
+            builder
+                .HasMany(p => p.CartItems)
+                .WithOne(ci => ci.Product)
+                .HasForeignKey(ci => ci.ProductId)
+                .IsRequired();
+
+            builder
+                .HasOne(p => p.Inventory)
+                .WithOne(i => i.Product)
+                .HasForeignKey<Inventory>(i => i.ProductId)
+                .IsRequired();
         }
     }
 }
