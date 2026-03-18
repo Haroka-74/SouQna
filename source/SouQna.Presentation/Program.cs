@@ -12,8 +12,7 @@ const string CorsPolicyName = "Frontend";
 builder.Services.AddControllers(options =>
 {
     options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
-});
-builder.Services.AddControllers().AddJsonOptions(options =>
+}).AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });

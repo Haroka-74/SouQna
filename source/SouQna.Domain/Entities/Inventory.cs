@@ -23,7 +23,7 @@ namespace SouQna.Domain.Entities
         public void DecrementStock(int quantity)
         {
             if (Quantity < quantity)
-                throw new InsufficientStockException(Quantity, quantity);
+                throw new InsufficientStockException(Product.Name);
 
             Quantity -= quantity;
         }
