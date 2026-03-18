@@ -16,6 +16,8 @@ namespace SouQna.Infrastructure.Persistence.Configurations
 
             builder.Property(i => i.ProductId).HasColumnName("product_id");
             builder.Property(i => i.Quantity).HasColumnName("quantity");
+
+            builder.Property<uint>("version").IsRowVersion();
         }
     }
 }

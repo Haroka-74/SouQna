@@ -23,22 +23,12 @@ namespace SouQna.Application.Features.Products.GetProducts
                 (!request.MinPrice.HasValue || p.Price >= request.MinPrice) &&
                 (!request.MaxPrice.HasValue || p.Price <= request.MaxPrice);
 
-            IOrderedQueryable<Product> orderBy(IQueryable<Product> query)
-            {
-                return request.SortColumn?.ToLower() switch
+            Func<IQueryable<Product>, IOrderedQueryable<Product>> orderBy = q =>
+                request.SortBy?.ToLower() switch
                 {
-                    "price" =>
-                        request.SortOrder == "desc"
-                        ? query.OrderByDescending(p => p.Price)
-                        : query.OrderBy(p => p.Price),
-                    "name" =>
-                        request.SortOrder == "desc"
-                        ? query.OrderByDescending(p => p.Name)
-                        : query.OrderBy(p => p.Name),
-                    _ =>
-                        query.OrderByDescending(p => p.CreatedAt)
+                    "price" => request.IsDescending ? q.OrderByDescending(p => p.Price) : q.OrderBy(p => p.Price),
+                    _ => q.OrderByDescending(p => p.CreatedAt)
                 };
-            }
 
             var (items, totalCount) = await unitOfWork.Products.GetPagedAsync(
                 request.PageNumber,

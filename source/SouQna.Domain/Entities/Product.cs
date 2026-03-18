@@ -14,6 +14,9 @@ namespace SouQna.Domain.Entities
         private readonly List<CartItem> _cartItems = [];
         public IReadOnlyCollection<CartItem> CartItems => _cartItems.AsReadOnly();
 
+        private readonly List<OrderItem> _orderItems = [];
+        public IReadOnlyCollection<OrderItem> OrderItems => _orderItems.AsReadOnly();
+
         private Product()
         {
             Name = string.Empty;

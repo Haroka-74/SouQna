@@ -1,3 +1,5 @@
+using SouQna.Domain.Exceptions;
+
 namespace SouQna.Domain.Entities
 {
     public class Inventory
@@ -16,6 +18,14 @@ namespace SouQna.Domain.Entities
             ProductId = productId;
             Quantity = quantity;
             Product = null!;
+        }
+
+        public void DecrementStock(int quantity)
+        {
+            if (Quantity < quantity)
+                throw new InsufficientStockException(Quantity, quantity);
+
+            Quantity -= quantity;
         }
     }
 }

@@ -11,6 +11,9 @@ namespace SouQna.Domain.Entities
 
         public Cart Cart { get; private set; }
 
+        private readonly List<Order> _orders = [];
+        public IReadOnlyCollection<Order> Orders => _orders.AsReadOnly();
+
         private User()
         {
             FirstName = string.Empty;

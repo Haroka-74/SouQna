@@ -10,7 +10,7 @@ namespace SouQna.Application.Features.Products.GetProducts
         string? SearchTerm = null,
         decimal? MinPrice = null,
         decimal? MaxPrice = null,
-        string? SortColumn = null,
-        string? SortOrder = null
+        string? SortBy = null,
+        bool IsDescending = false
     ) : IRequest<Page<ProductDTO>>;
 }
