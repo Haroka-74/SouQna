@@ -72,5 +72,11 @@ namespace SouQna.Infrastructure.Persistence.Repositories
             await context.Set<T>().AddAsync(entity);
             return entity;
         }
+
+        public async Task DeleteRangeAsync(IEnumerable<T> entities)
+        {
+            context.Set<T>().RemoveRange(entities);
+            await Task.CompletedTask;
+        }
     }
 }

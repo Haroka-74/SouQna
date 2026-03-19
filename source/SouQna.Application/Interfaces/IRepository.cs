@@ -21,5 +21,6 @@ namespace SouQna.Application.Interfaces
         );
         Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
         Task<T> AddAsync(T entity);
+        Task DeleteRangeAsync(IEnumerable<T> entities);
     }
 }

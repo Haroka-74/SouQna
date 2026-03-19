@@ -1,7 +1,7 @@
 using MediatR;
 using SouQna.Domain.Enums;
 using SouQna.Application.Common;
-using SouQna.Application.Features.Orders.Shared;
+using SouQna.Application.DTOs.Orders;
 
 namespace SouQna.Application.Features.Orders.GetUserOrders
 {

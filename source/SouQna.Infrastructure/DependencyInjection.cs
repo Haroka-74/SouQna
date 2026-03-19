@@ -31,6 +31,10 @@ namespace SouQna.Infrastructure
             configuration.GetSection("Server").Bind(serverSettings);
             services.AddSingleton(serverSettings);
 
+            var clientSettings = new ClientSettings();
+            configuration.GetSection("Client").Bind(clientSettings);
+            services.AddSingleton(clientSettings);
+
             services.AddDbContextPool<SouQnaDbContext>(options =>
             {
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
@@ -61,6 +65,13 @@ namespace SouQna.Infrastructure
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IHasher, Hasher>();
             services.AddScoped<IJwtService, JwtService>();
+            services.AddHttpClient<IPaymentService, PaymobService>((sp, client) =>
+            {
+                var settings = sp.GetRequiredService<PaymobSettings>();
+                client.BaseAddress = new Uri(settings.BaseAddress);
+            });
+            services.AddScoped<IHmacVerifier, PaymobHmacVerifier>();
+            services.AddScoped<IWebhookParser, PaymobWebhookParser>();
 
             return services;
         }

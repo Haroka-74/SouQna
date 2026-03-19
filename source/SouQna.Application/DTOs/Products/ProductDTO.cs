@@ -1,4 +1,4 @@
-namespace SouQna.Application.Features.Products.Shared
+namespace SouQna.Application.DTOs.Products
 {
     public record ProductDTO(
         Guid Id,

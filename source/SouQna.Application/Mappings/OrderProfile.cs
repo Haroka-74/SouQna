@@ -1,6 +1,6 @@
 using AutoMapper;
 using SouQna.Domain.Entities;
-using SouQna.Application.Features.Orders.Shared;
+using SouQna.Application.DTOs.Orders;
 
 namespace SouQna.Application.Mappings
 {

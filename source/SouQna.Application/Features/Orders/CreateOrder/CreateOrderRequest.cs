@@ -1,5 +1,5 @@
 using MediatR;
-using SouQna.Application.Features.Orders.Shared;
+using SouQna.Application.DTOs.Orders;
 
 namespace SouQna.Application.Features.Orders.CreateOrder
 {

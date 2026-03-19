@@ -2,7 +2,7 @@ using MediatR;
 using AutoMapper;
 using SouQna.Application.Interfaces;
 using SouQna.Application.Exceptions;
-using SouQna.Application.Features.Orders.Shared;
+using SouQna.Application.DTOs.Orders;
 
 namespace SouQna.Application.Features.Orders.GetOrder
 {

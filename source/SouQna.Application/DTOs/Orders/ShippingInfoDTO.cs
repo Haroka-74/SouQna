@@ -1,4 +1,4 @@
-namespace SouQna.Application.Features.Orders.Shared
+namespace SouQna.Application.DTOs.Orders
 {
     public record ShippingInfoDTO(
         string ShippingFullName,

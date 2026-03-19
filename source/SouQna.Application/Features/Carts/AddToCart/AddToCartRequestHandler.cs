@@ -3,7 +3,7 @@ using AutoMapper;
 using SouQna.Domain.Entities;
 using SouQna.Application.Interfaces;
 using SouQna.Application.Exceptions;
-using SouQna.Application.Features.Carts.Shared;
+using SouQna.Application.DTOs.Carts;
 
 namespace SouQna.Application.Features.Carts.AddToCart
 {

@@ -1,6 +1,6 @@
 using AutoMapper;
 using SouQna.Domain.Entities;
-using SouQna.Application.Features.Carts.Shared;
+using SouQna.Application.DTOs.Carts;
 
 namespace SouQna.Application.Mappings
 {

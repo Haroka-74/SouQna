@@ -4,7 +4,7 @@ using SouQna.Domain.Entities;
 using System.Linq.Expressions;
 using SouQna.Application.Common;
 using SouQna.Application.Interfaces;
-using SouQna.Application.Features.Orders.Shared;
+using SouQna.Application.DTOs.Orders;
 
 namespace SouQna.Application.Features.Orders.GetUserOrders
 {

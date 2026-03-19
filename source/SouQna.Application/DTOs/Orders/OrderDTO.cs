@@ -1,6 +1,6 @@
 using SouQna.Domain.Enums;
 
-namespace SouQna.Application.Features.Orders.Shared
+namespace SouQna.Application.DTOs.Orders
 {
     public record OrderDTO(
         Guid Id,

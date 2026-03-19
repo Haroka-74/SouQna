@@ -14,6 +14,7 @@ namespace SouQna.Infrastructure.Persistence.Repositories
         public IRepository<Inventory> Inventories { get; private set; }
         public IRepository<Order> Orders { get; private set; }
         public IRepository<OrderItem> OrderItems { get; private set; }
+        public IRepository<Payment> Payments { get; private set; }
 
         public UnitOfWork(SouQnaDbContext context)
         {
@@ -26,6 +27,7 @@ namespace SouQna.Infrastructure.Persistence.Repositories
             Inventories = new Repository<Inventory>(_context);
             Orders = new Repository<Order>(_context);
             OrderItems = new Repository<OrderItem>(_context);
+            Payments = new Repository<Payment>(_context);
         }
 
         public async Task SaveChangesAsync() => await _context.SaveChangesAsync();

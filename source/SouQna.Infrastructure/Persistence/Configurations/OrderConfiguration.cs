@@ -39,6 +39,12 @@ namespace SouQna.Infrastructure.Persistence.Configurations
                 .WithOne(oi => oi.Order)
                 .HasForeignKey(oi => oi.OrderId)
                 .IsRequired();
+
+            builder
+                .HasMany(o => o.Payments)
+                .WithOne(p => p.Order)
+                .HasForeignKey(p => p.OrderId)
+                .IsRequired();
         }
     }
 }

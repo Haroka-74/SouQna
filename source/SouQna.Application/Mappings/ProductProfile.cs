@@ -1,6 +1,6 @@
 using AutoMapper;
 using SouQna.Domain.Entities;
-using SouQna.Application.Features.Products.Shared;
+using SouQna.Application.DTOs.Products;
 
 namespace SouQna.Application.Mappings
 {

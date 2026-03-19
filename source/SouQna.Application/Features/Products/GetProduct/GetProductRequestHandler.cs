@@ -2,7 +2,7 @@ using MediatR;
 using AutoMapper;
 using SouQna.Application.Interfaces;
 using SouQna.Application.Exceptions;
-using SouQna.Application.Features.Products.Shared;
+using SouQna.Application.DTOs.Products;
 
 namespace SouQna.Application.Features.Products.GetProduct
 {

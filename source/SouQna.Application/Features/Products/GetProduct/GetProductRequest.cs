@@ -1,5 +1,5 @@
 using MediatR;
-using SouQna.Application.Features.Products.Shared;
+using SouQna.Application.DTOs.Products;
 
 namespace SouQna.Application.Features.Products.GetProduct
 {

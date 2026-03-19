@@ -1,7 +1,7 @@
 using MediatR;
 using AutoMapper;
 using SouQna.Application.Interfaces;
-using SouQna.Application.Features.Carts.Shared;
+using SouQna.Application.DTOs.Carts;
 
 namespace SouQna.Application.Features.Carts.GetCart
 {

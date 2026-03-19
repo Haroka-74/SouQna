@@ -1,4 +1,5 @@
 using SouQna.Domain.Enums;
+using SouQna.Domain.Exceptions;
 
 namespace SouQna.Domain.Entities
 {
@@ -23,6 +24,9 @@ namespace SouQna.Domain.Entities
 
         private readonly List<OrderItem> _orderItems = [];
         public IReadOnlyCollection<OrderItem> OrderItems => _orderItems.AsReadOnly();
+
+        private readonly List<Payment> _payments = [];
+        public IReadOnlyCollection<Payment> Payments => _payments.AsReadOnly();
 
         private Order()
         {
@@ -68,6 +72,8 @@ namespace SouQna.Domain.Entities
             User = null!;
         }
 
+        public bool IsPending => OrderStatus == OrderStatus.Pending;
+
         public static Order Create(
             Guid userId,
             string shippingFullName,
@@ -93,6 +99,15 @@ namespace SouQna.Domain.Entities
                 null,
                 null
             );
+        }
+
+        public void Confirm()
+        {
+            if (!IsPending)
+                throw new InvalidStateException($"Cannot confirm order, status is {OrderStatus}");
+
+            OrderStatus = OrderStatus.Confirmed;
+            ConfirmedAt = DateTime.UtcNow;
         }
 
         private static string GenerateOrderNumber()

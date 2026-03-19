@@ -1,4 +1,4 @@
-namespace SouQna.Application.Features.Carts.Shared
+namespace SouQna.Application.DTOs.Carts
 {
     public record CartItemDTO(
         Guid Id,

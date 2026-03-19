@@ -11,6 +11,7 @@ namespace SouQna.Application.Interfaces
         IRepository<Inventory> Inventories { get; }
         IRepository<Order> Orders { get; }
         IRepository<OrderItem> OrderItems { get; }
+        IRepository<Payment> Payments { get; }
         Task SaveChangesAsync();
     }
 }
