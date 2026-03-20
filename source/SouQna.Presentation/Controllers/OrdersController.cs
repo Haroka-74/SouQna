@@ -4,6 +4,7 @@ using SouQna.Presentation.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using SouQna.Application.Features.Orders.GetOrder;
 using SouQna.Application.Features.Orders.CreateOrder;
+using SouQna.Application.Features.Orders.ProcessOrder;
 using SouQna.Application.Features.Orders.GetUserOrders;
 
 namespace SouQna.Presentation.Controllers
@@ -60,6 +61,14 @@ namespace SouQna.Presentation.Controllers
                 new { id = result.Id },
                 result
             );
+        }
+
+        [HttpPost("warehouse/{id:guid}/process")]
+        [Authorize(Roles = "warehouse")]
+        public async Task<IActionResult> ProcessOrderAsync(Guid id)
+        {
+            await sender.Send(new ProcessOrderRequest(id));
+            return NoContent();
         }
     }
 }

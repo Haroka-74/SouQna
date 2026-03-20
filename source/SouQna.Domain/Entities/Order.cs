@@ -73,6 +73,7 @@ namespace SouQna.Domain.Entities
         }
 
         public bool IsPending => OrderStatus == OrderStatus.Pending;
+        public bool IsConfirmed => OrderStatus == OrderStatus.Confirmed;
 
         public static Order Create(
             Guid userId,
@@ -108,6 +109,14 @@ namespace SouQna.Domain.Entities
 
             OrderStatus = OrderStatus.Confirmed;
             ConfirmedAt = DateTime.UtcNow;
+        }
+
+        public void Process()
+        {
+            if (!IsConfirmed)
+                throw new InvalidStateException($"Cannot process order, status is {OrderStatus}");
+
+            OrderStatus = OrderStatus.Processing;
         }
 
         private static string GenerateOrderNumber()
