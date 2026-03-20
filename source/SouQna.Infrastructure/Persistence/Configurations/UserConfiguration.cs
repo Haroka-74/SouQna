@@ -22,6 +22,12 @@ namespace SouQna.Infrastructure.Persistence.Configurations
 
             builder.Property(u => u.PasswordHash).HasColumnName("password_hash");
             builder.Property(u => u.CreatedAt).HasColumnName("created_at");
+
+            builder
+                .HasMany(u => u.UserRoles)
+                .WithOne(ur => ur.User)
+                .HasForeignKey(ur => ur.UserId)
+                .IsRequired();
         }
     }
 }

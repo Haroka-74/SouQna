@@ -17,7 +17,10 @@ namespace SouQna.Application.Features.Authentication.LoginUser
         {
             var normalizedEmail = request.Email.Trim().ToLowerInvariant();
 
-            var user = await unitOfWork.Users.FindAsync(u => u.Email == normalizedEmail);
+            var user = await unitOfWork.Users.FindAsync(
+                u => u.Email == normalizedEmail,
+                "UserRoles.Role"
+            );
 
             if(user is null || !hasher.Verify(request.Password, user.PasswordHash))
                 throw new UnauthorizedException("Invalid Email or Password");

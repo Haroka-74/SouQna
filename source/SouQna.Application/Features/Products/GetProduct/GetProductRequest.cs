@@ -5,5 +5,5 @@ namespace SouQna.Application.Features.Products.GetProduct
 {
     public record GetProductRequest(
         Guid Id
-    ) : IRequest<ProductDTO>;
+    ) : IRequest<AdminProductDTO>;
 }

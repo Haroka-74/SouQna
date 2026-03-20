@@ -20,12 +20,31 @@ namespace SouQna.Domain.Entities
             Product = null!;
         }
 
+        public static Inventory Create(Guid productId, int quantity)
+        {
+            return new Inventory(
+                Guid.NewGuid(),
+                productId,
+                quantity
+            );
+        }
+
         public void DecrementStock(int quantity)
         {
             if (Quantity < quantity)
                 throw new InsufficientStockException(Product.Name);
 
             Quantity -= quantity;
+        }
+
+        public void AdjustStock(int adjustment)
+        {
+            var newQuantity = Quantity + adjustment;
+
+            if(newQuantity < 0)
+                throw new InsufficientStockException(Product.Name);
+
+            Quantity = newQuantity;
         }
     }
 }

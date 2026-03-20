@@ -8,6 +8,8 @@ namespace SouQna.Infrastructure.Persistence.Repositories
         private readonly SouQnaDbContext _context;
 
         public IRepository<User> Users { get; private set; }
+        public IRepository<UserRole> UserRoles { get; private set; }
+        public IRepository<Role> Roles { get; private set; }
         public IRepository<Product> Products { get; private set; }
         public IRepository<Cart> Carts { get; private set; }
         public IRepository<CartItem> CartItems { get; private set; }
@@ -21,6 +23,8 @@ namespace SouQna.Infrastructure.Persistence.Repositories
             _context = context;
 
             Users = new Repository<User>(_context);
+            UserRoles = new Repository<UserRole>(_context);
+            Roles = new Repository<Role>(_context);
             Products = new Repository<Product>(_context);
             Carts = new Repository<Cart>(_context);
             CartItems = new Repository<CartItem>(_context);

@@ -35,5 +35,29 @@ namespace SouQna.Domain.Entities
             CreatedAt = createdAt;
             Inventory = null!;
         }
+
+        public static Product Create(string name, string description, string image, decimal price)
+        {
+            return new Product(
+                Guid.NewGuid(),
+                name,
+                description,
+                image,
+                price,
+                DateTime.UtcNow
+            );
+        }
+
+        public void UpdateMetadata(string name, string description, decimal price)
+        {
+            Name = name;
+            Description = description;
+            Price = price;
+        }
+
+        public void UpdateImage(string image)
+        {
+            Image = image;
+        }
     }
 }

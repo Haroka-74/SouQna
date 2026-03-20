@@ -9,18 +9,19 @@ namespace SouQna.Application.Features.Products.GetProduct
     public class GetProductRequestHandler(
         IUnitOfWork unitOfWork,
         IMapper mapper
-    ) : IRequestHandler<GetProductRequest, ProductDTO>
+    ) : IRequestHandler<GetProductRequest, AdminProductDTO>
     {
-        public async Task<ProductDTO> Handle(
+        public async Task<AdminProductDTO> Handle(
             GetProductRequest request,
             CancellationToken cancellationToken
         )
         {
             var product = await unitOfWork.Products.FindAsync(
-                p => p.Id == request.Id
+                p => p.Id == request.Id,
+                p => p.Inventory
             ) ?? throw new NotFoundException($"Product with (id: {request.Id}) was not found");
 
-            return mapper.Map<ProductDTO>(product);
+            return mapper.Map<AdminProductDTO>(product);
         }
     }
 }

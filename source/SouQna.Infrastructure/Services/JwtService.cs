@@ -14,14 +14,20 @@ namespace SouQna.Infrastructure.Services
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.SecretKey));
 
+            var roles = user.UserRoles.Select(ur => ur.Role.Name).ToList();
+
+            var claims = new List<Claim>
+            {
+                new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
             var jwtSecurityToken = new JwtSecurityToken(
                 issuer: settings.Issuer,
                 audience: settings.Audience,
-                claims:
-                [
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                ],
+                claims: claims,
                 expires: DateTime.UtcNow.AddDays(30),
                 signingCredentials: new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256)
             );
