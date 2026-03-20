@@ -75,6 +75,7 @@ namespace SouQna.Domain.Entities
         public bool IsPending => OrderStatus == OrderStatus.Pending;
         public bool IsConfirmed => OrderStatus == OrderStatus.Confirmed;
         public bool IsProcessing => OrderStatus == OrderStatus.Processing;
+        public bool IsShipped => OrderStatus == OrderStatus.Shipped;
 
         public static Order Create(
             Guid userId,
@@ -127,6 +128,15 @@ namespace SouQna.Domain.Entities
 
             OrderStatus = OrderStatus.Shipped;
             ShippedAt = DateTime.UtcNow;
+        }
+
+        public void Deliver()
+        {
+            if (!IsShipped)
+                throw new InvalidStateException($"Cannot deliver order, status is {OrderStatus}");
+
+            OrderStatus = OrderStatus.Delivered;
+            DeliveredAt = DateTime.UtcNow;
         }
 
         private static string GenerateOrderNumber()

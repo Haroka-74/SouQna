@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using SouQna.Presentation.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using SouQna.Application.Features.Orders.GetOrder;
+using SouQna.Application.Features.Orders.ShipOrder;
 using SouQna.Application.Features.Orders.CreateOrder;
 using SouQna.Application.Features.Orders.ProcessOrder;
+using SouQna.Application.Features.Orders.DeliverOrder;
 using SouQna.Application.Features.Orders.GetUserOrders;
-using SouQna.Application.Features.Orders.ShipOrder;
 
 namespace SouQna.Presentation.Controllers
 {
@@ -77,6 +78,14 @@ namespace SouQna.Presentation.Controllers
         public async Task<IActionResult> ShipOrderAsync(Guid id)
         {
             await sender.Send(new ShipOrderRequest(id));
+            return NoContent();
+        }
+
+        [HttpPost("delivery/{id:guid}/deliver")]
+        [Authorize(Roles = "delivery")]
+        public async Task<IActionResult> DeliverOrderAsync(Guid id)
+        {
+            await sender.Send(new DeliverOrderRequest(id));
             return NoContent();
         }
     }
