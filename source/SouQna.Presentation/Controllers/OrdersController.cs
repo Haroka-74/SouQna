@@ -4,6 +4,7 @@ using SouQna.Presentation.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using SouQna.Application.Features.Orders.GetOrder;
 using SouQna.Application.Features.Orders.ShipOrder;
+using SouQna.Application.Features.Orders.GetOrders;
 using SouQna.Application.Features.Orders.CreateOrder;
 using SouQna.Application.Features.Orders.ProcessOrder;
 using SouQna.Application.Features.Orders.DeliverOrder;
@@ -15,6 +16,13 @@ namespace SouQna.Presentation.Controllers
     [ApiController]
     public class OrdersController(ISender sender) : ControllerBase
     {
+        [HttpGet("all")]
+        [Authorize(Roles = "warehouse,delivery")]
+        public async Task<IActionResult> GetOrdersAsync([FromQuery] GetOrdersRequest request)
+        {
+            return Ok(await sender.Send(request));
+        }
+
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetUserOrdersAsync([FromQuery] Contracts.GetUserOrdersRequest request)
@@ -38,8 +46,8 @@ namespace SouQna.Presentation.Controllers
             return Ok(
                 await sender.Send(
                     new GetOrderRequest(
-                        User.GetUserId(),
-                        id
+                        id,
+                        User.GetUserId()
                     )
                 )
             );
@@ -87,6 +95,20 @@ namespace SouQna.Presentation.Controllers
         {
             await sender.Send(new DeliverOrderRequest(id));
             return NoContent();
+        }
+
+        [HttpGet("/api/warehouse/orders/{id}")]
+        [Authorize(Roles = "warehouse,delivery")]
+        public async Task<IActionResult> GetForStaff(Guid id)
+        {
+            return Ok(
+                await sender.Send(
+                    new GetOrderRequest(
+                        id,
+                        null
+                    )
+                )
+            );
         }
     }
 }
