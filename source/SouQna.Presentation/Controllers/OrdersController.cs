@@ -6,6 +6,7 @@ using SouQna.Application.Features.Orders.GetOrder;
 using SouQna.Application.Features.Orders.CreateOrder;
 using SouQna.Application.Features.Orders.ProcessOrder;
 using SouQna.Application.Features.Orders.GetUserOrders;
+using SouQna.Application.Features.Orders.ShipOrder;
 
 namespace SouQna.Presentation.Controllers
 {
@@ -68,6 +69,14 @@ namespace SouQna.Presentation.Controllers
         public async Task<IActionResult> ProcessOrderAsync(Guid id)
         {
             await sender.Send(new ProcessOrderRequest(id));
+            return NoContent();
+        }
+
+        [HttpPost("warehouse/{id:guid}/ship")]
+        [Authorize(Roles = "warehouse")]
+        public async Task<IActionResult> ShipOrderAsync(Guid id)
+        {
+            await sender.Send(new ShipOrderRequest(id));
             return NoContent();
         }
     }
