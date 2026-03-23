@@ -1,0 +1,24 @@
+using MediatR;
+using SouQna.Application.Exceptions;
+using SouQna.Application.Interfaces;
+
+namespace SouQna.Application.Features.Orders.Warehouse.ShipOrder
+{
+    public class ShipOrderRequestHandler(
+        IUnitOfWork unitOfWork
+    ) : IRequestHandler<ShipOrderRequest>
+    {
+        public async Task Handle(
+            ShipOrderRequest request,
+            CancellationToken cancellationToken
+        )
+        {
+            var order = await unitOfWork.Orders.FindAsync(
+                o => o.Id == request.Id
+            ) ?? throw new NotFoundException($"Order with (id: {request.Id}) was not found");
+
+            order.Ship();
+            await unitOfWork.SaveChangesAsync();
+        }
+    }
+}

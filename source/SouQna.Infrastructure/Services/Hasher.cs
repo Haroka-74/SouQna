@@ -4,10 +4,10 @@ namespace SouQna.Infrastructure.Services
 {
     public class Hasher : IHasher
     {
-        public string Hash(string plainText)
-            => BCrypt.Net.BCrypt.HashPassword(plainText);
+        public string Hash(string plain)
+            => BCrypt.Net.BCrypt.HashPassword(plain);
 
-        public bool Verify(string plainText, string hash)
-            => BCrypt.Net.BCrypt.Verify(plainText, hash);
+        public bool Verify(string plain, string hash)
+            => BCrypt.Net.BCrypt.Verify(plain, hash);
     }
 }

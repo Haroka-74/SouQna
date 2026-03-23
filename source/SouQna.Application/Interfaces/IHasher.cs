@@ -2,7 +2,7 @@ namespace SouQna.Application.Interfaces
 {
     public interface IHasher
     {
-        string Hash(string plainText);
-        bool Verify(string plainText, string hash);
+        string Hash(string plain);
+        bool Verify(string plain, string hash);
     }
 }

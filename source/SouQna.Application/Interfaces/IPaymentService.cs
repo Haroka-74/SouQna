@@ -1,4 +1,4 @@
-using SouQna.Application.DTOs.Orders;
+using SouQna.Application.Features.Payments.Customer.CreatePayment.DTOs;
 
 namespace SouQna.Application.Interfaces
 {
@@ -12,7 +12,7 @@ namespace SouQna.Application.Interfaces
             string shippingPhoneNumber,
             string shippingCity,
             string shippingAddressLine,
-            List<OrderItemDTO> orderItems
+            List<PaymentItemDTO> paymentItems
         );
     }
 }

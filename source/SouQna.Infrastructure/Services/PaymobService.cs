@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 using System.Net.Http.Headers;
 using SouQna.Application.Interfaces;
 using SouQna.Infrastructure.Settings;
-using SouQna.Application.DTOs.Orders;
+using SouQna.Application.Features.Payments.Customer.CreatePayment.DTOs;
 
 namespace SouQna.Infrastructure.Services
 {
@@ -26,14 +26,14 @@ namespace SouQna.Infrastructure.Services
             string shippingPhoneNumber,
             string shippingCity,
             string shippingAddressLine,
-            List<OrderItemDTO> orderItems
+            List<PaymentItemDTO> paymentItems
         )
         {
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", paymobSettings.SecretKey);
 
-            var tax = total - orderItems.Sum(d => d.Subtotal);
+            var tax = total - paymentItems.Sum(d => d.Subtotal);
 
-            var items = orderItems.Select(d => new
+            var items = paymentItems.Select(d => new
             {
                 name = d.ItemName,
                 amount = (long) (d.ItemPrice * 100),
@@ -70,7 +70,7 @@ namespace SouQna.Infrastructure.Services
                 },
                 special_reference = $"{orderId}_{Guid.NewGuid()}",
                 expiration = 900,
-                notification_url = $"{serverSettings.BaseAddress}/api/payments/webhook",
+                notification_url = $"{serverSettings.BaseAddress}/api/webhooks/payments",
                 redirection_url = $"{clientSettings.BaseAddress}"
             };
 
