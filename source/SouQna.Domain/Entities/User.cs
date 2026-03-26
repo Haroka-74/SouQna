@@ -17,6 +17,9 @@ namespace SouQna.Domain.Entities
         private readonly List<UserRole> _userRoles = [];
         public IReadOnlyCollection<UserRole> UserRoles => _userRoles.AsReadOnly();
 
+        private readonly List<Review> _reviews = [];
+        public IReadOnlyCollection<Review> Reviews => _reviews.AsReadOnly();
+
         private User()
         {
             FirstName = string.Empty;

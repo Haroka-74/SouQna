@@ -28,6 +28,12 @@ namespace SouQna.Infrastructure.Persistence.Configurations
                 .WithOne(ur => ur.User)
                 .HasForeignKey(ur => ur.UserId)
                 .IsRequired();
+
+            builder
+                .HasMany(u => u.Reviews)
+                .WithOne(r => r.User)
+                .HasForeignKey(r => r.UserId)
+                .IsRequired();
         }
     }
 }

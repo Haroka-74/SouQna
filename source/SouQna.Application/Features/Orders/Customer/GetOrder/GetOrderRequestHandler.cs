@@ -20,6 +20,7 @@ namespace SouQna.Application.Features.Orders.Customer.GetOrder
 
             var items = order.OrderItems.Select(
                 i => new DTOs.OrderItemDTO(
+                    i.ProductId,
                     i.ItemName,
                     i.ItemImage,
                     i.ItemPrice,

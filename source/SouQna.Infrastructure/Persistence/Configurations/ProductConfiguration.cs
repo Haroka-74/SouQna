@@ -37,6 +37,12 @@ namespace SouQna.Infrastructure.Persistence.Configurations
                 .WithOne(i => i.Product)
                 .HasForeignKey<Inventory>(i => i.ProductId)
                 .IsRequired();
+
+            builder
+                .HasMany(p => p.Reviews)
+                .WithOne(r => r.Product)
+                .HasForeignKey(r => r.ProductId)
+                .IsRequired();
         }
     }
 }

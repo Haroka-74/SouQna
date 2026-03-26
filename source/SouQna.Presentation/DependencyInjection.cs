@@ -11,6 +11,7 @@ namespace SouQna.Presentation
             services.AddExceptionHandler<NotFoundExceptionHandler>();
             services.AddExceptionHandler<InsufficientStockExceptionHandler>();
             services.AddExceptionHandler<InvalidStateExceptionHandler>();
+            services.AddExceptionHandler<ForbiddenExceptionHandler>();
             services.AddExceptionHandler<GlobalExceptionHandler>();
 
             services.AddProblemDetails();
