@@ -6,6 +6,7 @@ namespace SouQna.Application.Features.Orders.Customer.GetOrder.DTOs
         string ItemImage,
         decimal ItemPrice,
         int ItemQuantity,
-        decimal Subtotal
+        decimal Subtotal,
+        bool IsReviewed
     );
 }

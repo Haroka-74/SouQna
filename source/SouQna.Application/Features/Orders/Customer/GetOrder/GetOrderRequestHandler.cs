@@ -15,7 +15,7 @@ namespace SouQna.Application.Features.Orders.Customer.GetOrder
         {
             var order = await unitOfWork.Orders.FindAsync(
                 o => o.Id == request.OrderId && o.UserId == request.UserId,
-                o => o.OrderItems
+                "OrderItems.Product.Reviews"
             ) ?? throw new NotFoundException($"Order with (id: {request.OrderId}) was not found");
 
             var items = order.OrderItems.Select(
@@ -25,7 +25,8 @@ namespace SouQna.Application.Features.Orders.Customer.GetOrder
                     i.ItemImage,
                     i.ItemPrice,
                     i.ItemQuantity,
-                    i.ItemQuantity * i.ItemPrice
+                    i.ItemQuantity * i.ItemPrice,
+                    i.Product.Reviews.Any(r => r.UserId == request.UserId)
                 )
             ).ToList();
 

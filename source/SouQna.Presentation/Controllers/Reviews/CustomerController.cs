@@ -6,7 +6,7 @@ using SouQna.Application.Features.Reviews.Customer.CreateReview;
 
 namespace SouQna.Presentation.Controllers.Reviews
 {
-    [Route("api/products/{productId:guid}/reviews")]
+    [Route("api/customer/products/{productId:guid}/reviews")]
     [ApiController]
     [Authorize]
     [Tags("Customer - Reviews")]
