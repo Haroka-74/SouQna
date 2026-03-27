@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SouQna.Presentation.Extensions;
 using Microsoft.AspNetCore.Authorization;
+using SouQna.Application.Features.Reviews.Customer.GetReviews;
 using SouQna.Application.Features.Reviews.Customer.CreateReview;
 
 namespace SouQna.Presentation.Controllers.Reviews
@@ -13,9 +14,21 @@ namespace SouQna.Presentation.Controllers.Reviews
     public class CustomerController(ISender sender) : ControllerBase
     {
         [HttpGet]
-        public IActionResult GetReviews()
+        public async Task<IActionResult> GetReviews(
+            [FromRoute] Guid productId,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10
+        )
         {
-            return Ok();
+            return Ok(
+                await sender.Send(
+                    new GetReviewsRequest(
+                        productId,
+                        pageNumber,
+                        pageSize
+                    )
+                )
+            );
         }
 
         [HttpPost]
@@ -27,7 +40,6 @@ namespace SouQna.Presentation.Controllers.Reviews
                     productId,
                     request.Rating,
                     request.Body
-
                 )
             );
 
